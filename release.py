@@ -3,7 +3,7 @@ from github import Github
 import os
 
 # Using an access token
-g = Github(os.getenv('GITHUB_TOKEN'))
+g = Github(os.getenv('TOKEN'))
 
 # Then play with your Github objects:
 repo = g.get_repo('brandon-lent/Scripted-Releases-Test')
