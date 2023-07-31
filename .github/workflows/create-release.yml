@@ -20,7 +20,7 @@ jobs:
         pip install PyGithub
 
     - name: Create Release
-      run: python ../../release.py
+      run: python ./scripts/create_release.py
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         REPO_NAME: "username/reponame"
