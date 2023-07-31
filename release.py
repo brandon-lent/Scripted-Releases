@@ -6,7 +6,7 @@ import os
 g = Github(os.getenv('GITHUB_TOKEN'))
 
 # Then play with your Github objects:
-repo = g.get_repo(os.getenv('REPO_NAME'))
+repo = g.get_repo(os.getenv('Scripted-Releases-test'))
 
 tag = "v1.0.0"
 release_name = "Release 1.0.0"
