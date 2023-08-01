@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install PyGithub python-dotenv
+          pip install PyGithub python-dotenv GitPython
 
       - name: Create Release
         run: python ./release.py
