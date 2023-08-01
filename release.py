@@ -1,11 +1,14 @@
 import os
 import re
 from github import Github
+from dotenv import load_dotenv
 from datetime import datetime
 
+load_dotenv()
 
-# Step 1: Setup Github API instance and retrieve repo
-g = Github("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")
+# Iterate over environment variable# Step 1: Setup Github API instance and retrieve repo
+access_token = os.getenv("ACCESS_TOKEN")
+g = Github(access_token)
 repo = g.get_repo("brandon-lent/Scripted-Releases-Test")
 
 # Step 2: Get the latest release
