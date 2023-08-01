@@ -1,17 +1,30 @@
-
-from github import Github
 import os
+import re
+from github import Github
+from datetime import datetime
 
-# Using an access token
-g = Github(os.getenv('TOKEN'))
 
-# Then play with your Github objects:
-repo = g.get_repo('brandon-lent/Scripted-Releases-Test')
+# Step 1: Setup Github API instance and retrieve repo
+g = Github("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")
+repo = g.get_repo("brandon-lent/Scripted-Releases-Test")
 
-tag = "v1.0.0"
-release_name = "Release 1.0.0"
-body = "This is the release description"
-prerelease = False
+# Step 2: Get the latest release
+latest_release = repo.get_latest_release()
+latest_tag = latest_release.tag_name
+
+# Step 3: Extract the version number and increment it
+version_number = re.findall(r'\d+', latest_tag)
+next_version_number = int(version_number[0]) + 1
+next_tag = f'v{next_version_number}.0.0'
+
+# Step 4: Generate release title with current date
+current_date = datetime.now().strftime('%Y-%m-%d')
+
+# Step 5: Provide release details
+release_tag = next_tag
+release_title = f'{current_date} - Pre-Release'
+release_body = 'Description of release'
 draft = False
 
-release = repo.create_git_release(tag, release_name, body, draft, prerelease)
+# Step 6: Create new release
+release = repo.create_git_release(release_tag, release_title, release_body, draft=draft)
