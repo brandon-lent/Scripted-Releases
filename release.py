@@ -31,3 +31,6 @@ draft = False
 
 # Step 6: Create new release
 release = repo.create_git_release(release_tag, release_title, release_body, draft=draft)
+release_url = release.html_url
+
+print("📝 Release Notes can be found here: " + release_url)
