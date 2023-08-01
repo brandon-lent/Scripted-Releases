@@ -28,6 +28,15 @@ repo.create_git_ref(ref=f'refs/heads/{new_branch}', sha=repo.get_branch('main').
 # Step 5: Generate release title with current date
 current_date = datetime.now().strftime('%Y-%m-%d')
 
+# Step 6: Grab pull requests related to this change and append to release body
+pull_requests = repo.get_pulls(base=new_branch)
+for pr in pull_requests:
+    pr_title = pr.title
+    pr_url = pr.html_url
+
+    print(f"- [{pr_title}]({pr_url})")
+    release_body += f"- [{pr_title}]({pr_url})\n"
+
 # Step 6: Provide release details
 release_tag = next_tag
 release_title = f'{current_date} - Pre-Release'
@@ -35,8 +44,11 @@ release_body = 'Description of release'
 draft = False
 
 
-# Step 7: Create new release
-release = repo.create_git_release(release_tag, release_title, release_body, draft=draft, target_commitish=new_branch)
-release_url = release.html_url
+# Step 7: Attempt to create new release
+try:
+    release = repo.create_git_release(release_tag, release_title, release_body, draft=draft, target_commitish=new_branch)
+    release_url = release.html_url
+    print("📝 Release Notes can be found here: " + release_url)
+except GithubException as e:
+    print(f"An error occured attempting to create the git release: {str(e)}")
 
-print("📝 Release Notes can be found here: " + release_url)
