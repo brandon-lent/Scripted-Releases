@@ -1,7 +1,6 @@
 import os
 import re
 from github import Github
-from git import Repo
 from dotenv import load_dotenv
 from datetime import datetime
 
@@ -21,34 +20,38 @@ version_number = re.findall(r'\d+', latest_tag)
 next_version_number = int(version_number[0]) + 1
 next_tag = f'v{next_version_number}.0.0'
 
+print(next_tag)
+
 # Step 4: Create new release branch
 new_branch = f'pre-release-{next_version_number}'
-repo.create_git_ref(ref=f'refs/heads/{new_branch}', sha=repo.get_branch('main').commit.sha)
+try:
+    repo.create_git_ref(ref=f'refs/heads/{new_branch}', sha=repo.get_branch('main').commit.sha)
+except Exception as e:
+    print("Failed to create new branch as it already exists")
+    raise ValueError(f"Failed to create new branch {new_branch}: {str(e)} as it already exists")
 
 # Step 5: Generate release title with current date
 current_date = datetime.now().strftime('%Y-%m-%d')
 
 # Step 6: Grab pull requests related to this change and append to release body
 pull_requests = repo.get_pulls(base=new_branch)
+release_notes_from_pull_requests = ""
 for pr in pull_requests:
     pr_title = pr.title
     pr_url = pr.html_url
 
     print(f"- [{pr_title}]({pr_url})")
-    release_body += f"- [{pr_title}]({pr_url})\n"
+    release_notes_from_pull_requests += f"- [{pr_url}]({pr_title})\n"
 
 # Step 6: Provide release details
 release_tag = next_tag
-release_title = f'{current_date} - Pre-Release'
-release_body = 'Description of release'
+release_title = "test"
+release_body = release_notes_from_pull_requests
 draft = False
 
 
 # Step 7: Attempt to create new release
-try:
-    release = repo.create_git_release(release_tag, release_title, release_body, draft=draft, target_commitish=new_branch)
-    release_url = release.html_url
-    print("📝 Release Notes can be found here: " + release_url)
-except GithubException as e:
-    print(f"An error occured attempting to create the git release: {str(e)}")
+release = repo.create_git_release(release_tag, release_title, release_body, draft=draft, target_commitish=new_branch)
+release_url = release.html_url
+print("📝 Release Notes can be found here: " + release_url)
 
