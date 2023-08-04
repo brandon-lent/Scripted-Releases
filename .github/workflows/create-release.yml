@@ -2,6 +2,16 @@ name: Create Release
 
 on:
   workflow_dispatch:
+    inputs:
+      release_action:
+        type: choice
+        description: "Select how you'll create a release"
+        required: true
+        default: "Create release"
+        options:
+          - "Create release"
+          - "Update release"
+          - "Finalize release"
 
 jobs:
   build:
@@ -25,13 +35,3 @@ jobs:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           ACTION: "create-release"
           REPO_NAME: "brandon-lent/Scripted-Releases-Test"
-
-    inputs:
-      release_action:
-        description: "Select how you'll create a release"
-        required: true
-        default: "Create release"
-        options:
-          - "Create release"
-          - "Update release"
-          - "Finalize release"
