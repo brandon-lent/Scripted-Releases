@@ -23,4 +23,15 @@ jobs:
         run: python ./release.py
         env:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          ACTION: "create-release"
           REPO_NAME: "brandon-lent/Scripted-Releases-Test"
+
+    inputs:
+      release_action:
+        description: "Select how you'll create a release"
+        required: true
+        default: "Create release"
+        options:
+          - "Create release"
+          - "Update release"
+          - "Finalize release"
