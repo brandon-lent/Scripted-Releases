@@ -5,7 +5,7 @@ on:
     inputs:
       release_action:
         type: choice
-        description: "Select how you'll create a release"
+        description: "Select release action"
         required: true
         default: "Create release"
         options:
@@ -18,6 +18,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: User input
+        run: |
+          echo "Selected option: ${{ inputs.release_action }}"
 
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -29,9 +32,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install PyGithub python-dotenv GitPython
 
-      - name: Create Release
+      - name: Manage Release
         run: python ./release.py
         env:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          RELEASE_ACTION: ${{inputs.release_action}}
           ACTION: "create-release"
           REPO_NAME: "brandon-lent/Scripted-Releases-Test"
