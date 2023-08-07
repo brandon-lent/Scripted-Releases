@@ -4,14 +4,29 @@ This workflow is intended to easily automate the release process by automaticall
 
 ## Requirements
 
-Two seperate options required
+Four seperate options required
 1. Create-release
 2. Update-release
 3. Finalize-release
+4. Create-hotfix
 
 ### Create-release
 
 **Purpose**: To easily create release branch and release notes with auto-incrementing tags
+
+When we create a release, we want the ability to have a minor / major version. In order to do this, we can grab a value from the GitHub action dropdown. 
+
+Ex:
+
+**If the release is minor**:
+1. Grab latest tag. eg: v1.0.0
+2. Tag = v1.1.0-rc1
+3. Branch = release/portal/v1.1.0
+
+**If the release is major**:
+1. Grab latest tag. eg: v1.0.0
+2. Tag = v2.0.0-rc1
+3. Branch = release/portal/v2.0.0
 
 To create a release it needs to:
 1. Create Release branch Ex: release/portal/v1.0.0
@@ -20,6 +35,11 @@ To create a release it needs to:
  2. The release note title will be release-{{date}}
 
 ### Update-release
+
+**If the release is a hotfix**
+1. Grab latest tag. eg: v1.0.0
+2. Tag = v1.0.1
+3. Branch = release/portal/v1.0.1-hotfix
 
 **Purpose**: In the event an addition to a given release is required, this task will be used. 
 
@@ -36,6 +56,73 @@ To update a release it needs to:
 To finalize the release, it needs to:
 1. Grab the latest release candidate tag 
 2. Drop the 'rc' on the tag
+
+## Example with Major release
+
+The current tag is **v1.0.0**
+
+### We create a major release
+**Note**: diff is between last production tag and rc1 we are creating
+1. Tag = v2.0.0-rc1
+2. Branch = release/portal/v2.0.0 with the changes in the tag
+3. Release with release notes created in GitHub called portal/v2.0.0-rc1
+
+### We need to update the release with new changes
+**Note**: diff is between rc1 and rc2 for release notes
+1. Tag = v2.0.0-rc2
+2. Branch = release/portal/v2.0.0
+3. Release with release notes created in GitHub called portal/v2.0.0-rc2
+
+### We finalize the release to promote it to production
+**Note**: Diff is between last production tag and this tag
+1. Tag = v2.0.0
+2. Branch = release/portal/v2.0.0
+3. Release with release notes created in GitHub called portal/v2.0.0
+
+## Example with Minor release
+The current tag is **v1.0.0**
+
+### We create a major release
+**Note**: diff is between last production tag and rc1 we are creating
+1. Tag = v1.1.0-rc1
+2. Branch = release/portal/v1.1.0 with the changes in the tag
+3. Release with release notes created in GitHub called portal/v1.1.0-rc1
+
+### We need to update the release with new changes
+**Note**: diff is between rc1 and rc2 for release notes
+1. Tag = v1.1.0-rc2
+2. Branch = release/portal/v1.1.0
+3. Release with release notes created in GitHub called portal/v1.1.0-rc2
+
+### We finalize the release to promote it to production
+**Note**: Diff is between last production tag and this tag
+1. Tag = v1.1.0
+2. Branch = release/portal/v1.1.0
+3. Release with release notes created in GitHub called portal/v1.1.0
+
+## Example with Hotfix
+The current tag is **v1.0.0**
+
+### We create hotfix
+q: How do we merge the hotfix to main?
+
+1. Tag = v1.0.1
+2. Branch = release/portal/v1.0.1 **Note: the origin of this branch is from prod tag not main**
+3. Create release/portal/v1.0.1 that compares the new tag with the latest prod tag
+
+### Developer works off newly created branch
+
+1. Developer would create a pull request against `release/portal/v1.0.1`
+2. This PR would eventually be approved and merged to the hotfix branch
+
+### 
+
+
+
+created branch out of prod
+create release candidate branch that came out of prod tag, not main.
+
+
 
 
 ## Implementation
