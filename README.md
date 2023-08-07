@@ -105,19 +105,17 @@ The current tag is **v1.0.0**
 
 ### We create hotfix
 q: How do we merge the hotfix to main?
+1. Branch = release/portal/v1.0.1 **Note: the origin of this branch is from prod tag not main**
 
-1. Tag = v1.0.1
-2. Branch = release/portal/v1.0.1 **Note: the origin of this branch is from prod tag not main**
-3. Create release/portal/v1.0.1 that compares the new tag with the latest prod tag
 
 ### Developer works off newly created branch
 
 1. Developer would create a pull request against `release/portal/v1.0.1`
-2. This PR would eventually be approved and merged to the hotfix branch
+ould eventually be approved and merged to the hotfix branch
 
 ### 
-
-
+1. Tag = v1.0.1
+2. Create release notes: portal/v1.0.1 that compares the new tag with the latest prod tag
 
 created branch out of prod
 create release candidate branch that came out of prod tag, not main.
