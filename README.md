@@ -57,6 +57,18 @@ To finalize the release, it needs to:
 1. Grab the latest release candidate tag 
 2. Drop the 'rc' on the tag
 
+
+### Create-hotfix
+
+**Purpose**: In the event we need to publish a hotfix to the production environment, we can use this action to do so.
+
+To create a hotfix, it needs to:
+1. Grab specified commit hash(s) and cherry-pick those into the existing release candidate branch
+2. Create new hotfix tag from the release candidate branch
+3. Generate release notes against the latest release to prod and the newly created tag
+
+---
+
 ## Example with Major release
 
 The current tag is **v1.0.0**
