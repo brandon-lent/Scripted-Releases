@@ -67,7 +67,6 @@ To create a hotfix, it needs to:
 2. Create new hotfix tag from the release candidate branch
 3. Generate release notes against the latest release to prod and the newly created tag
 
----
 
 ## Example with Major release
 
