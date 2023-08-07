@@ -34,7 +34,7 @@ To update a release it needs to:
 
 To finalize the release, it needs to:
 1. Grab the latest release candidate tag 
-
+2. Drop the 'rc' on the tag
 
 
 ## Implementation
