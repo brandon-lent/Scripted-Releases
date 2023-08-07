@@ -7,6 +7,7 @@ This workflow is intended to easily automate the release process by automaticall
 Two seperate options required
 1. Create-release
 2. Update-release
+3. Finalize-release
 
 ### Create-release
 
