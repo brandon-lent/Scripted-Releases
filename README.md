@@ -103,25 +103,17 @@ The current tag is **v1.0.0**
 ## Example with Hotfix
 The current tag is **v1.0.0**
 
-### We create hotfix
-q: How do we merge the hotfix to main?
-1. Branch = release/portal/v1.0.1 **Note: the origin of this branch is from prod tag not main**
+### Developer creates Hotfix PR
+1. Opens PR against `main` and merge
+2. Grab the commit hash to pass to the create-hotfix script
+   
+### Developer runs the create-hotfix task
+1. Developer passes in the commit hash to the script which will cherrypick the specified commits
+2. Script creates new tag: v1.0.1
+3. Script creates release notes: portal/v1.0.1. The diff is between v1.0.1 and v1.0.0 in this case.
 
-
-### Developer works off newly created branch
-
-1. Developer would create a pull request against `release/portal/v1.0.1`
-ould eventually be approved and merged to the hotfix branch
-
-### 
-1. Tag = v1.0.1
-2. Create release notes: portal/v1.0.1 that compares the new tag with the latest prod tag
-
-created branch out of prod
-create release candidate branch that came out of prod tag, not main.
-
-
-
+### We take the tag and deploy to target environment
+1. Pass in the new tag v1.0.1 and deploy that to prod.
 
 ## Implementation
 
