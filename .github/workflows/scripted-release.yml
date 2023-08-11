@@ -44,7 +44,7 @@ jobs:
       - name: Manage Release
         run: |
           python ./release.py
-          echo "::set-output name=value_from_script::$value"
+          echo "{name}={value}" >> $GITHUB_STATE
         env:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           RELEASE_ACTION: ${{inputs.release_action}}
