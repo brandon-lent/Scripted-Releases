@@ -10,7 +10,7 @@ class ReleaseVersion(Enum):
     MINOR = "Minor"
 
 
-def generate_release_notes(pull_requests, repo):
+def generate_release_notes(pull_requests, repo, target_branch):
     """
     Expected release notes format:
 
@@ -25,7 +25,6 @@ def generate_release_notes(pull_requests, repo):
     for pr in pull_requests:
         pr_title = pr.title
         pr_url = pr.html_url
-
         try:
             pr_obj = repo.get_pull(pr.number)
             pr_body = pr_obj.body
@@ -43,7 +42,7 @@ def generate_release_notes(pull_requests, repo):
 
         emoji_to_add_if_value_exists = "🚩" if value_exists_within_risk_assessment_table else ""
         release_notes_from_pull_requests += f"- {pr_url}: {str.capitalize(pr_title)} {emoji_to_add_if_value_exists} \n"
-
+    print(release_notes_from_pull_requests)
     return release_notes_from_pull_requests
 
 
