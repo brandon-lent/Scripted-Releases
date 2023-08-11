@@ -1,9 +1,10 @@
 import os
-import re
 
-from github import Github, RateLimitExceededException
+from github import Github
 from dotenv import load_dotenv
 from enum import Enum
+
+from scripted_releases_utils import generate_release_notes, increment_release_tag_and_branch_from_version
 
 load_dotenv()
 
@@ -14,12 +15,6 @@ class ReleaseAction(Enum):
     UPDATE_RELEASE = "Update release"
     FINALIZE_RELEASE = "Finalize release"
     HOTFIX = "Hotfix"
-
-
-# Maps the release version env variable which is defined by a GitHub action dropdown that runs this script
-class ReleaseVersion(Enum):
-    MAJOR = "Major"
-    MINOR = "Minor"
 
 
 # Setup GitHub API instance and retrieve repo
@@ -33,55 +28,20 @@ repo = g.get_repo(repo_name)
 def create_release():
     release_version = os.getenv("RELEASE_VERSION")
 
-    # Get the latest release
     latest_release = repo.get_latest_release()
     latest_tag = latest_release.tag_name
-
-    tag_version = re.findall(r'\d+', latest_tag)
-    current_major_version = int(tag_version[0])
-    current_minor_version = int(tag_version[1])
-
-    if release_version == ReleaseVersion.MAJOR.value:
-        next_tag = f'v{current_major_version + 1}.0.0-rc1'
-        new_branch = f'release/portal/v{current_major_version + 1}.0.0'
-    elif release_version == ReleaseVersion.MINOR.value:
-        next_tag = f'v{current_major_version}.{current_minor_version + 1}.0-rc1'
-        new_branch = f'release/portal/v{current_major_version}.{current_minor_version + 1}.0'
-    else:
-        raise ValueError("RELEASE_VERSION not set. Action aborted.")
+    next_tag, new_branch = increment_release_tag_and_branch_from_version(latest_tag, release_version)
 
     try:
         repo.create_git_ref(ref=f'refs/heads/{new_branch}', sha=repo.get_branch('main').commit.sha)
     except Exception as e:
-        # If this occurs, it is most likely a reference error, such as the branch already existing.
+        # If this occurs, it is most likely a reference error, such as the branch/tag already existing.
         raise ValueError(f"❌ Failed to create new branch {new_branch}: {str(e)}")
 
     # Grab pull requests related to this change and append to release body
     pull_requests = repo.get_pulls(base='main', state='closed', sort='created', direction='desc')
-    release_notes_from_pull_requests = "## Release Notes: \n"
 
-    for pr in pull_requests:
-        pr_title = pr.title
-        pr_url = pr.html_url
-
-        try:
-            pr_obj = repo.get_pull(pr.number)
-            pr_body = pr_obj.body
-        except RateLimitExceededException:
-            raise ValueError("GitHub API rate limit exceeded.")
-
-        value_exists_within_risk_assessment_table = False
-        search_value = "Yes"
-        pattern = fr'\|.*{search_value}.*\|'
-
-        if pr_body:
-            pr_body.encode("utf-8").decode("unicode-escape")
-            if re.search(pattern, pr_body, re.IGNORECASE):
-                value_exists_within_risk_assessment_table = True
-
-        emoji_to_add_if_value_exists = "🚩" if value_exists_within_risk_assessment_table else ""
-
-        release_notes_from_pull_requests += f"- {pr_url}: {str.capitalize(pr_title)} {emoji_to_add_if_value_exists} \n"
+    release_notes_from_pull_requests = generate_release_notes(pull_requests, repo)
 
     # Provide release details
     release_tag = next_tag
