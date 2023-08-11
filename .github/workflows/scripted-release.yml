@@ -52,7 +52,7 @@ jobs:
       - name: Action Summary
         run: |
           echo "## Summary This is the lead in sentence for the list" >> $GITHUB_STEP_SUMMARY
-          echo "The value is ${{ steps.script_output.outputs.value_from_script }}" >> $GITHUB_STEP_SUMMARY
+          echo "The value is ${{ $GITHUB_STATE }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY # this is a blank line
           echo "- Lets add a bullet point" >> $GITHUB_STEP_SUMMARY
           echo "- Lets add a second bullet point" >> $GITHUB_STEP_SUMMARY
