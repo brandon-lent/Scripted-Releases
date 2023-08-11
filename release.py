@@ -51,7 +51,7 @@ def create_release():
 
     # Attempt to create new release
     release = repo.create_git_release(release_tag, release_title, release_body, draft=draft,
-                                      target_commitish=new_branch)
+                                      target_commitish=new_branch, generate_release_notes=True)
     release_url = release.html_url
     compare_release_url = f"{repo.html_url}/compare/{latest_release.tag_name}...{release.tag_name}"
     print(f"✅ Created new branch: {new_branch}")
