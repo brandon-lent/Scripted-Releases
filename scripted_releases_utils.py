@@ -35,7 +35,7 @@ def generate_release_notes(pull_requests, repo):
         value_exists_within_risk_assessment_table = False
         search_value = "Yes"
         pattern = fr'\|.*{search_value}.*\|'
-
+        print(pr)
         if pr_body:
             pr_body.encode("utf-8").decode("unicode-escape")
             if re.search(pattern, pr_body, re.IGNORECASE):
