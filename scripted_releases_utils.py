@@ -67,8 +67,8 @@ def increment_release_tag_and_branch_from_version(latest_tag, release_version):
     current_minor_version = int(tag_version[1])
 
     if release_version == ReleaseVersion.MAJOR.value:
-        next_tag = f'v{current_major_version + 1}.0.0-rc1'
-        new_branch = f'release/portal/v{current_major_version + 1}.0.0'
+        next_tag = f'v{current_major_version + 5}.0.0-rc1'
+        new_branch = f'release/portal/v{current_major_version + 5}.0.0'
     elif release_version == ReleaseVersion.MINOR.value:
         next_tag = f'v{current_major_version}.{current_minor_version + 1}.0-rc1'
         new_branch = f'release/portal/v{current_major_version}.{current_minor_version + 1}.0'
