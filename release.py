@@ -41,16 +41,15 @@ def create_release():
     # Grab pull requests related to this change and append to release body
     pull_requests = repo.get_pulls(base=latest_tag, head=next_tag, state='closed', sort='created', direction='desc')
 
-    release_notes_from_pull_requests = generate_release_notes(pull_requests, repo)
+    # release_notes_from_pull_requests = generate_release_notes(pull_requests, repo)
 
     # Provide release details
     release_tag = next_tag
     release_title = f"portal/{release_tag}"
-    release_body = release_notes_from_pull_requests
     draft = False
 
     # Attempt to create new release
-    release = repo.create_git_release(release_tag, release_title, release_body, draft=draft,
+    release = repo.create_git_release(release_tag, release_title, message='', draft=draft,
                                       target_commitish=new_branch, generate_release_notes=True)
     release_url = release.html_url
     compare_release_url = f"{repo.html_url}/compare/{latest_release.tag_name}...{release.tag_name}"
