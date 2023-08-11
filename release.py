@@ -1,9 +1,7 @@
-import inspect
 import os
 import re
-from datetime import datetime
 
-from github import Github
+from github import Github, RateLimitExceededException
 from dotenv import load_dotenv
 from enum import Enum
 
@@ -65,7 +63,25 @@ def create_release():
     for pr in pull_requests:
         pr_title = pr.title
         pr_url = pr.html_url
-        release_notes_from_pull_requests += f"- {str.capitalize(pr_title)} {pr_url} \n"
+
+        try:
+            pr_obj = repo.get_pull(pr.number)
+            pr_body = pr_obj.body
+        except RateLimitExceededException:
+            raise ValueError("GitHub API rate limit exceeded.")
+
+        value_exists_within_risk_assessment_table = False
+        search_value = "Yes"
+        pattern = fr'\|.*{search_value}.*\|'
+
+        if pr_body:
+            pr_body.encode("utf-8").decode("unicode-escape")
+            if re.search(pattern, pr_body, re.IGNORECASE):
+                value_exists_within_risk_assessment_table = True
+
+        emoji_to_add_if_value_exists = "🚩" if value_exists_within_risk_assessment_table else ""
+
+        release_notes_from_pull_requests += f"- {pr_url}: {str.capitalize(pr_title)} {emoji_to_add_if_value_exists} \n"
 
     # Provide release details
     release_tag = next_tag
