@@ -47,4 +47,5 @@ jobs:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           RELEASE_ACTION: ${{inputs.release_action}}
           RELEASE_VERSION: ${{inputs.release_version}}
-          REPO_NAME: "newjersey/dol-ui-claimant-intake"
+      - name: Action Summary
+        run: echo 'Output' >> GITHUB_STEP_SUMMARY
