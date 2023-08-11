@@ -39,7 +39,7 @@ def create_release():
         raise ValueError(f"❌ Failed to create new branch {new_branch}: {str(e)}")
 
     # Grab pull requests related to this change and append to release body
-    pull_requests = repo.get_pulls(base="test", head="main", state='closed', sort='created', direction='desc')
+    pull_requests = repo.get_pulls(base=latest_tag, head=next_tag, state='closed', sort='created', direction='desc')
 
     release_notes_from_pull_requests = generate_release_notes(pull_requests, repo)
 
