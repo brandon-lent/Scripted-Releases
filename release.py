@@ -39,9 +39,9 @@ def create_release():
         raise ValueError(f"❌ Failed to create new branch {new_branch}: {str(e)}")
 
     # Grab pull requests related to this change and append to release body
-    pull_requests = repo.get_pulls(base=new_branch, state='closed', sort='created', direction='desc')
+    pull_requests = repo.get_pulls(base="test", head="main", state='closed', sort='created', direction='desc')
 
-    release_notes_from_pull_requests = generate_release_notes(pull_requests, repo, new_branch)
+    release_notes_from_pull_requests = generate_release_notes(pull_requests, repo)
 
     # Provide release details
     release_tag = next_tag
@@ -53,12 +53,13 @@ def create_release():
     release = repo.create_git_release(release_tag, release_title, release_body, draft=draft,
                                       target_commitish=new_branch)
     release_url = release.html_url
+    compare_release_url = f"{repo.html_url}/compare/{latest_release.tag_name}...{release.tag_name}"
     print(f"✅ Created new branch: {new_branch}")
     print(f"✅ Created new tag: {next_tag}")
     print(f"✅ Release Notes title: {release_title}")
     print("------")
-    print("📝 Release Notes can be found here: " + release_url)
-
+    print("🔗 Release Notes: " + release_url)
+    print("🔗 Tag Comparison: " + compare_release_url)
 
 def update_release():
     # To be implemented in #3314

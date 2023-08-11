@@ -10,7 +10,7 @@ class ReleaseVersion(Enum):
     MINOR = "Minor"
 
 
-def generate_release_notes(pull_requests, repo, target_branch):
+def generate_release_notes(pull_requests, repo):
     """
     Expected release notes format:
 
