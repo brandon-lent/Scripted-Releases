@@ -25,6 +25,10 @@ def generate_release_notes(pull_requests, repo):
     for pr in pull_requests:
         pr_title = pr.title
         pr_url = pr.html_url
+        Check if the pull request is a release and don't include them in the notes
+        if re.match(r"^release/portal/", pr_title, re.IGNORECASE):
+            continue
+            
         try:
             pr_obj = repo.get_pull(pr.number)
             pr_body = pr_obj.body
