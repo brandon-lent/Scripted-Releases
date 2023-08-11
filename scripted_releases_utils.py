@@ -4,7 +4,6 @@ from enum import Enum
 from github import RateLimitExceededException
 
 
-
 # Maps the release version env variable which is defined by a GitHub action dropdown that runs this script
 class ReleaseVersion(Enum):
     MAJOR = "Major"
