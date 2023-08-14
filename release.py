@@ -59,14 +59,13 @@ def create_release():
     compare_release_url = (
         f"{repo.html_url}/compare/{latest_release.tag_name}...{release.tag_name}"
     )
-    with open("release_log.txt", "w") as file:
-        print("------\n", file=file)
-        print(f"✅ Created new branch: {new_branch}\n", file=file)
-        print(f"✅ Created new tag: {next_tag}\n", file=file)
-        print(f"✅ Release Notes title: {release_title}\n", file=file)
-        print("------\n", file=file)
-        print(f"📝 Release Notes can be found here: {release_url}\n", file=file)
-        print(f"🔗 Tag Comparison: {compare_release_url}\n", file=file)
+
+    print(f"\n✅ Created new branch: {new_branch}\n")
+    print(f"✅ Created new tag: {next_tag}\n")
+    print(f"✅ Release Notes title: {release_title}\n")
+    print("------\n")
+    print(f"📝 Release Notes can be found here: {release_url}\n")
+    print(f"🔗 Tag Comparison: {compare_release_url}\n")
 
 
 def update_release():
