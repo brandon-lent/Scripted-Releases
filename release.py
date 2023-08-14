@@ -21,7 +21,6 @@ class ReleaseAction(Enum):
 access_token = os.getenv("ACCESS_TOKEN")
 repo_name = os.getenv("GITHUB_REPOSITORY")
 g = Github(access_token)
-print(repo_name)
 repo = g.get_repo(repo_name)
 
 
@@ -60,12 +59,14 @@ def create_release():
     compare_release_url = (
         f"{repo.html_url}/compare/{latest_release.tag_name}...{release.tag_name}"
     )
-    print(f"✅ Created new branch: {new_branch}")
-    print(f"✅ Created new tag: {next_tag}")
-    print(f"✅ Release Notes title: {release_title}")
-    print("------")
-    print("📝 Release Notes can be found here: " + release_url)
-    print("🔗 Tag Comparison: " + compare_release_url)
+    with open("release_log.txt", "w") as file:
+        print("------\n", file=file)
+        print(f"✅ Created new branch: {new_branch}\n", file=file)
+        print(f"✅ Created new tag: {next_tag}\n", file=file)
+        print(f"✅ Release Notes title: {release_title}\n", file=file)
+        print("------\n", file=file)
+        print(f"📝 Release Notes can be found here: {release_url}\n", file=file)
+        print(f"🔗 Tag Comparison: {compare_release_url}\n", file=file)
 
 
 def update_release():
