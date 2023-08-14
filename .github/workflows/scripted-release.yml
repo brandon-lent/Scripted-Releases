@@ -51,3 +51,4 @@ jobs:
         env:
           RELEASE_ACTION: ${{inputs.release_action}}
           RELEASE_VERSION: ${{inputs.release_version}}
+          GITHUB_TOKEN: ${{ github.token }}
