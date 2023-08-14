@@ -43,7 +43,7 @@ jobs:
 
       - name: Manage Release
         run: |
-          python ./release.py
+          python -u ./release.py
           echo "{name}={value}" >> $GITHUB_STATE
         env:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
