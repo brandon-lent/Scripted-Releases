@@ -45,7 +45,7 @@ jobs:
         id: manage-release
         run: |
           python ./release.py
-          cat release_log.txt >> $GITHUB_STEP_SUMMARY
+          cat ./release_log.txt >> $GITHUB_STEP_SUMMARY
         env:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           RELEASE_ACTION: ${{inputs.release_action}}
