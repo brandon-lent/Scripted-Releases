@@ -88,7 +88,7 @@ def hotfix():
 
 release_action = os.getenv("RELEASE_ACTION")
 
-print(f"\n🏁 Starting scripted release using release action: {release_action} 🏁")
+print(f"\n🏁 Started scripted release using release action: {release_action} 🏁")
 print("------")
 
 if release_action == ReleaseAction.CREATE_RELEASE.value:
