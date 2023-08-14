@@ -1,0 +1,14 @@
+------
+
+✅ Created new branch: release/portal/v289.0.0
+
+✅ Created new tag: v289.0.0-rc1
+
+✅ Release Notes title: portal/v289.0.0-rc1
+
+------
+
+📝 Release Notes can be found here: https://github.com/brandon-lent/Scripted-Releases-Test/releases/tag/v289.0.0-rc1
+
+🔗 Tag Comparison: https://github.com/brandon-lent/Scripted-Releases-Test/compare/v284.0.0-rc1...v289.0.0-rc1
+
