@@ -43,8 +43,8 @@ jobs:
 
       - name: Manage Release
         run: |
-          python -u ./release.py
-          echo "{name}={value}" >> $GITHUB_STATE
+          output=$(python ./release.py)
+          echo "{script_output}={$output}" >> $GITHUB_STEP_SUMMARY
         env:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           RELEASE_ACTION: ${{inputs.release_action}}
