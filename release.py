@@ -18,7 +18,7 @@ class ReleaseAction(Enum):
 
 
 # Setup GitHub API instance and retrieve repo
-access_token = os.getenv("ACCESS_TOKEN")
+access_token = os.getenv("GITHUB_TOKEN")
 repo_name = os.getenv("GITHUB_REPOSITORY")
 g = Github(access_token)
 repo = g.get_repo(repo_name)

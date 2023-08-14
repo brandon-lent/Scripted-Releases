@@ -25,6 +25,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - uses: actions/checkout@v2
       - name: User input
@@ -47,6 +50,5 @@ jobs:
           python ./release.py
           cat ./release_log.txt >> $GITHUB_STEP_SUMMARY
         env:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           RELEASE_ACTION: ${{inputs.release_action}}
           RELEASE_VERSION: ${{inputs.release_version}}
