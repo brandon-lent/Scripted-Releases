@@ -42,9 +42,11 @@ jobs:
           pip install PyGithub python-dotenv
 
       - name: Manage Release
+        id: manage-release
         run: |
           output=$(python ./release.py)
-          echo "{script_output}={$output}" >> $GITHUB_STEP_SUMMARY
+          echo "{script_output}={$output}" >> $GITHUB_OUTPUT
+          echo ${{steps.manage-release.outputs.script_output}} >> $GITHUB_STEP_SUMMARY
         env:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           RELEASE_ACTION: ${{inputs.release_action}}
