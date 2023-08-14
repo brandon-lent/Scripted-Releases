@@ -26,8 +26,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      id-token: write
-      contents: read
+      contents: write
+
     steps:
       - uses: actions/checkout@v2
       - name: User input
@@ -48,7 +48,7 @@ jobs:
         id: manage-release
         run: |
           python ./release.py
-          cat release_log.txt >> $GITHUB_STEP_SUMMARY
+          cat ./release_log.txt >> $GITHUB_STEP_SUMMARY
         env:
           RELEASE_ACTION: ${{inputs.release_action}}
           RELEASE_VERSION: ${{inputs.release_version}}
