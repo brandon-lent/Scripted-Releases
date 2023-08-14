@@ -67,6 +67,7 @@ def create_release():
         print("------\n", file=file)
         print(f"📝 Release Notes can be found here: {release_url}\n", file=file)
         print(f"🔗 Tag Comparison: {compare_release_url}\n", file=file)
+        file_contents = file.read()
 
 
 def update_release():
