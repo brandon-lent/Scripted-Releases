@@ -44,7 +44,7 @@ jobs:
       - name: Manage Release
         run: |
           output=$(python ./release.py)
-          {script_output}={$output} >> $GITHUB_STEP_SUMMARY
+          "{script_output}={$output}" >> $GITHUB_STEP_SUMMARY
         env:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           RELEASE_ACTION: ${{inputs.release_action}}
