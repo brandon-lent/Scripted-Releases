@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 import os
-import re
 
-from github import Github
+from github import Github, GithubException
 from dotenv import load_dotenv
 from enum import Enum
 
 from scripted_releases_utils import increment_release_tag_and_branch_from_version, \
-    increment_release_candidate_tag, get_latest_release_branch
+    increment_release_candidate_tag, get_latest_release_branch, get_latest_release_tag
 
 load_dotenv()
 
 # Specifies the naming convention of the release. Ex: "release/portal/v1.0.0"
 RELEASE_NAME = "portal"
+
 
 # Maps to the release action env variable which is defined by a GitHub action dropdown that runs this script
 class ReleaseAction(Enum):
@@ -35,13 +35,13 @@ def create_release():
     latest_tag = latest_release.tag_name
 
     next_tag, new_branch = increment_release_tag_and_branch_from_version(
-        latest_tag, release_version
+        latest_tag, release_version, RELEASE_NAME
     )
 
     # Create a base release if no release exists in repository. This should only run once.
     if not (latest_tag or latest_release):
         latest_release = f"{RELEASE_NAME}/v1.0.0-rc1"
-        next_tag = "v1.0.0"
+        next_tag = f"{RELEASE_NAME}/v1.0.0"
         new_branch = f"release/{RELEASE_NAME}/v1.0.0"
 
     try:
@@ -54,7 +54,7 @@ def create_release():
 
     # Provide release details
     release_tag = next_tag
-    release_title = f"{RELEASE_NAME}/{release_tag}"
+    release_title = f"{release_tag}"
     draft = False
 
     # Attempt to create new release
@@ -84,20 +84,24 @@ def create_release():
 
 def update_release():
     # Get relevant Github details
-    latest_tag = repo.get_latest_release().tag_name
-    incremented_tag = increment_release_candidate_tag(latest_tag)
+    latest_tag = get_latest_release_tag(RELEASE_NAME, repo)
     latest_release_branch = get_latest_release_branch(RELEASE_NAME, repo)
+    incremented_tag = increment_release_candidate_tag(latest_tag.name)
 
-    # Attempt to create a new git tag and ref
+    # Attempt to create a new git tag, ref, and merge changes
+    branch = repo.get_branch(latest_release_branch)
+    newly_created_tag = repo.create_git_tag(incremented_tag, f"Release Candidate tag {incremented_tag} created",
+                                            branch.commit.sha, type="commit")
+
+    ref = repo.create_git_ref(f"refs/tags/{newly_created_tag.tag}", sha=branch.commit.sha)
+
     try:
-        newly_created_tag = repo.create_git_tag(incremented_tag, f"Release Candidate tag {incremented_tag} created")
-        repo.create_git_ref(f"refs/tags/{incremented_tag}", repo.get_git_ref(f"refs/heads/{latest_release_branch}").object.sha)
-        repo.merge(latest_release_branch, newly_created_tag.tag, f"Merging {newly_created_tag} into {latest_release_branch}")
-    except Exception as e:
-        raise Exception(f"An error occurred: {e}")
+        repo.merge(branch.name, ref.object.sha, "Merge changes from newly created tag to release branch")
+    except GithubException as e:
+        print(f"Merge unsuccessful. An error occurred: {str(e)}")
 
     compare_tags_url = (
-        f"{repo.html_url}/compare/{latest_tag}...{incremented_tag}"
+        f"{repo.html_url}/compare/{latest_tag.name}...{incremented_tag}"
     )
 
     with open("release_log.txt", "w") as file:

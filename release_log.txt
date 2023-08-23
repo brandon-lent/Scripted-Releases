@@ -1,8 +1,9 @@
 ## Links
 
-🔗 **Tag Comparison:** https://github.com/brandon-lent/Scripted-Releases-Test/compare/v289.5.0-rc4...v289.5.0-rc5
+🔗 **Tag Comparison:** https://github.com/brandon-lent/Scripted-Releases-Test/compare/portal/v292.0.0-rc3...portal/v292.0.0-rc4
 
 ## Details
 
-✅ Created new tag: **v289.5.0-rc5**
+✅ Created new tag: **portal/v292.0.0-rc4**
 
+✅ Merged changes into release/portal/v292.0.0 branch
