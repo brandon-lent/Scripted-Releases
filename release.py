@@ -90,10 +90,11 @@ def update_release():
 
     # Attempt to create a new git tag, ref, and merge changes
     branch = repo.get_branch(latest_release_branch)
+    main_branch = repo.get_branch("main")
     newly_created_tag = repo.create_git_tag(incremented_tag, f"Release Candidate tag {incremented_tag} created",
-                                            branch.commit.sha, type="commit")
+                                            main_branch.commit.sha, type="commit")
 
-    ref = repo.create_git_ref(f"refs/tags/{newly_created_tag.tag}", sha=branch.commit.sha)
+    ref = repo.create_git_ref(f"refs/tags/{newly_created_tag.tag}", sha=main_branch.commit.sha)
 
     try:
         repo.merge(branch.name, ref.object.sha, "Merge changes from newly created tag to release branch")
