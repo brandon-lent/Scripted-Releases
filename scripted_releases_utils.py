@@ -38,3 +38,48 @@ def increment_release_tag_and_branch_from_version(latest_tag, release_version):
         raise ValueError("RELEASE_VERSION not set. Action aborted.")
 
     return [next_tag, new_branch]
+
+
+def get_latest_release_branch(release_name, repo):
+    """
+    Grabs the latest release branch and returns the entire branch name.
+
+    Example with three branches:
+    `release/portal/v1.0.0`, `release/portal/v2.0.0`, `release/portal/v2.1.0`
+
+    Would return: `release/portal/v2.1.0`
+    """
+    branch_name_pattern = re.compile(fr'release/{release_name}/v\d+\.\d+\.\d+')
+    for branch in repo.get_branches():
+        print(branch)
+    # Extract matching branches
+    release_branches = [branch.name for branch in repo.get_branches() if re.match(branch_name_pattern, branch.name)]
+    print(release_branches)
+    # Sort the branches by version in descending order
+    latest_branch = sorted(release_branches, key=lambda x: [int(num) for num in re.findall(r"\d+", x)])[-1]
+
+    if not latest_branch:
+        raise Exception("No release branches found")
+
+    return latest_branch
+
+
+def increment_release_candidate_tag(tag):
+    """
+    Increments the release candidate (rc) tag. This is used to update an existing release tag,
+    so it is expected the -rc1 version is already created.
+
+    Example output:
+    `portal/v1.0.0-rc1` -> `portal/v1.0.0-rc2`
+    """
+    # Split the tag into its prefix and release candidate number
+    prefix, rc_tag = tag.rsplit('-rc', 1)
+
+    # Try to convert the rc part into an integer, increment and construct the new tag
+    try:
+        rc_num = int(rc_tag)
+        new_rc = f"{prefix}-rc{rc_num + 1}"
+    except ValueError:
+        raise ValueError(f"Invalid RC tag in {tag}. Expected format: -rcN")
+    return new_rc
+
