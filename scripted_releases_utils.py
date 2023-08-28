@@ -80,6 +80,9 @@ def get_latest_release_tag(release_name, repo: Repository):
 
     Example with three tags:
     `portal/v1.0.0-rc1`, `portal/v2.0.0-rc1`, `portal/v2.1.0-rc1`
+
+    Would return:
+    `portal/v2.1.0-rc1`
     """
 
     release_candidate_tags = []
