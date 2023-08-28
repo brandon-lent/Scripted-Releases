@@ -47,7 +47,7 @@ jobs:
       - name: Manage Release
         id: manage-release
         run: |
-          python ./release.py
+          python ./scripts/scripted_release/scripted_release.py
           cat ./release_log.txt >> $GITHUB_STEP_SUMMARY
         env:
           RELEASE_ACTION: ${{inputs.release_action}}

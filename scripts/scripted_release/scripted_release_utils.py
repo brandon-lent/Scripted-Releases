@@ -11,6 +11,20 @@ class ReleaseVersion(Enum):
     MINOR = "Minor"
 
 
+class ReleaseLog:
+    def __init__(self, filename):
+        self.filename = filename
+        self.create_log_file()
+
+    def create_log_file(self):
+        with open(self.filename, "w"):
+            pass
+
+    def append_release_line(self, release_line):
+        with open(self.filename, "a") as file:
+            file.write(release_line + "\n")
+
+
 def increment_release_tag_and_branch_from_version(latest_tag, release_version, release_name):
     """
     Expected release tag format: portal/v1.0.0

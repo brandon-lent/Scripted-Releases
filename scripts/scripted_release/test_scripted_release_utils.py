@@ -1,37 +1,74 @@
+# -*- coding: utf-8 -*-
+import os
 import unittest
 from unittest.mock import MagicMock
 
-from scripted_releases_utils import increment_release_candidate_tag, increment_release_tag_and_branch_from_version, \
-    get_latest_release_branch, get_latest_release_tag, extract_version
+from scripts.scripted_release.scripted_release_utils import (
+    increment_release_tag_and_branch_from_version,
+    get_latest_release_branch,
+    extract_version,
+    get_latest_release_tag,
+    increment_release_candidate_tag,
+    ReleaseLog,
+)
+
+
+class ReleaseLogTests(unittest.TestCase):
+    def setUp(self):
+        self.filename = "test_release_log.txt"
+        self.release_logger = ReleaseLog(self.filename)
+
+    def tearDown(self):
+        if os.path.exists(self.filename):
+            os.remove(self.filename)
+
+    def test_append_release_line(self):
+        # Append release lines
+        version = "Version 1.0.0"
+        self.release_logger.append_release_line(f"📝 Release Notes: {version}")
+        self.release_logger.append_release_line("🔗 Tag Comparison: v1.0.0...v1.1.0")
+        self.release_logger.append_release_line("✅ Created new branch: main")
+        self.release_logger.append_release_line("✅ Created new tag: v1.1.0")
+
+        # Verify that the file exists and contains the expected content
+        self.assertTrue(os.path.exists(self.filename))
+        with open(self.filename, "r") as file:
+            file_content = file.read()
+            self.assertIn("📝 Release Notes: Version 1.0.0", file_content)
+            self.assertIn("🔗 Tag Comparison: v1.0.0...v1.1.0", file_content)
+            self.assertIn("✅ Created new branch: main", file_content)
+            self.assertIn("✅ Created new tag: v1.1.0", file_content)
 
 
 class TestIncrementReleaseTagAndBranch(unittest.TestCase):
     def test_major_release(self):
-        latest_tag = "v1.0.0"
+        latest_tag = "portal/v1.0.0"
         release_version = "Major"
 
         result = increment_release_tag_and_branch_from_version(
-            latest_tag, release_version
+            latest_tag, release_version, "portal"
         )
 
-        self.assertEqual(result, ["v2.0.0-rc1", "release/portal/v2.0.0"])
+        self.assertEqual(result, ["portal/v2.0.0-rc1", "release/portal/v2.0.0"])
 
     def test_minor_release(self):
-        latest_tag = "v1.0.0"
+        latest_tag = "portal/v1.0.0"
         release_version = "Minor"
 
         result = increment_release_tag_and_branch_from_version(
-            latest_tag, release_version
+            latest_tag, release_version, "portal"
         )
 
-        self.assertEqual(result, ["v1.1.0-rc1", "release/portal/v1.1.0"])
+        self.assertEqual(result, ["portal/v1.1.0-rc1", "release/portal/v1.1.0"])
 
     def test_invalid_release_version(self):
         latest_tag = "v1.0.0"
         release_version = None
 
         with self.assertRaises(ValueError):
-            increment_release_tag_and_branch_from_version(latest_tag, release_version)
+            increment_release_tag_and_branch_from_version(
+                latest_tag, release_version, "portal"
+            )
 
 
 class BranchMock:
@@ -40,7 +77,6 @@ class BranchMock:
 
 
 class TestGetLatestReleaseBranch(unittest.TestCase):
-
     def setUp(self):
         self.repo = MagicMock()
         self.repo.get_branches.return_value = [
@@ -48,7 +84,7 @@ class TestGetLatestReleaseBranch(unittest.TestCase):
             BranchMock(name="release/portal/v1.1.0"),
             BranchMock(name="release/portal/v2.0.0"),
             BranchMock(name="release/other/v1.0.0"),
-            BranchMock(name="feature/portal/new-feature")
+            BranchMock(name="feature/portal/new-feature"),
         ]
         self.release_name = "portal"
 
@@ -101,32 +137,41 @@ class TestGetLatestReleaseTag(unittest.TestCase):
 
     def test_get_latest_release_tag(self):
         self.repo.get_tags.return_value = [
-            BranchMock(name='portal/v1.0.0-rc1'),
-            BranchMock(name='portal/v2.0.0-rc1'),
-            BranchMock(name='portal/v2.1.0-rc1')
+            BranchMock(name="portal/v1.0.0-rc1"),
+            BranchMock(name="portal/v2.0.0-rc1"),
+            BranchMock(name="portal/v2.1.0-rc1"),
         ]
 
-        latest_tag = get_latest_release_tag('portal', self.repo)
-        self.assertEqual(latest_tag.name, 'portal/v2.1.0-rc1')
+        latest_tag = get_latest_release_tag("portal", self.repo)
+        self.assertEqual(latest_tag.name, "portal/v2.1.0-rc1")
 
     def test_no_release_tags_found(self):
         self.repo.get_tags.return_value = []
 
-        latest_tag = get_latest_release_tag(' portal', self.repo)
+        latest_tag = get_latest_release_tag(" portal", self.repo)
         self.assertIsNone(latest_tag)
 
 
 class TestIncrementReleaseCandidateString(unittest.TestCase):
-
     def test_increment_release_candidate_tag(self):
-        self.assertEqual(increment_release_candidate_tag("portal/v1.0.0-rc1"), "portal/v1.0.0-rc2")
-        self.assertEqual(increment_release_candidate_tag("portal/v1.0.0-rc99"), "portal/v1.0.0-rc100")
-        self.assertEqual(increment_release_candidate_tag("portal/v2.3.4-rc5"), "portal/v2.3.4-rc6")
+        self.assertEqual(
+            increment_release_candidate_tag("portal/v1.0.0-rc1"), "portal/v1.0.0-rc2"
+        )
+        self.assertEqual(
+            increment_release_candidate_tag("portal/v1.0.0-rc99"), "portal/v1.0.0-rc100"
+        )
+        self.assertEqual(
+            increment_release_candidate_tag("portal/v2.3.4-rc5"), "portal/v2.3.4-rc6"
+        )
 
     def test_increment_non_rc_tag(self):
-        with self.assertRaises(ValueError, msg="Invalid RC tag in portal/v1.0.0. Expected format: -rcN"):
+        with self.assertRaises(
+                ValueError, msg="Invalid RC tag in portal/v1.0.0. Expected format: -rcN"
+        ):
             increment_release_candidate_tag("portal/v1.0.0")
-        with self.assertRaises(ValueError, msg="Invalid RC tag in portal/RC_test. Expected format: -rcN"):
+        with self.assertRaises(
+                ValueError, msg="Invalid RC tag in portal/RC_test. Expected format: -rcN"
+        ):
             increment_release_candidate_tag("portal/RC_test")
 
 

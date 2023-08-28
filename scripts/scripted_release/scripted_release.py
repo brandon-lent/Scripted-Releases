@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
 import os
-
 from github import Github, GithubException, UnknownObjectException
 from dotenv import load_dotenv
 from enum import Enum
 
-from scripted_releases_utils import increment_release_tag_and_branch_from_version, \
-    increment_release_candidate_tag, get_latest_release_branch, get_latest_release_tag
+from scripted_release_utils import (
+    increment_release_tag_and_branch_from_version,
+    get_latest_release_tag,
+    get_latest_release_branch,
+    increment_release_candidate_tag,
+    ReleaseLog,
+)
 
 load_dotenv()
 
@@ -31,24 +35,38 @@ repo = g.get_repo(repo_name)
 
 def create_release():
     release_version = os.getenv("RELEASE_VERSION")
+
     try:
         latest_release = repo.get_latest_release()
         # Handles the case where a release exists but doesn't follow our expected release format.
-        if latest_release.title.startswith(f"release/{RELEASE_NAME}/"):
+        # Example format: `portal/v1.0.0`
+        if not latest_release.title.startswith(f"{RELEASE_NAME}/v"):
             raise UnknownObjectException
+
     except UnknownObjectException:
-        print("No release found, attempting to create one")
+        print("No release found, attempting to create the first release via script.")
+        latest_release = None
 
+    if not latest_release:
         # Create a base release, tag, and branch if no release exists in repository. This should only run once.
-        new_branch = repo.create_git_ref(f"refs/heads/release/{RELEASE_NAME}/v0.1.0",
-                                         repo.get_branch("main").commit.sha)
+        new_branch = repo.create_git_ref(
+            f"refs/heads/release/{RELEASE_NAME}/v0.1.0",
+            repo.get_branch("main").commit.sha,
+        )
 
-        # Create first release as a minor increment
-        release = repo.create_git_release(name=f"{RELEASE_NAME}/v0.1.0-rc1", tag=f"{RELEASE_NAME}/v0.1.0", draft=False,
-                                          message="🎉 This is the first release! 🎉",
-                                          target_commitish=new_branch.object.sha,
-                                          generate_release_notes=True)
-        release_title = release.title
+        new_release = repo.create_git_release(
+            name=f"{RELEASE_NAME}/v0.1.0",
+            tag=f"{RELEASE_NAME}/v0.1.0-rc1",
+            draft=False,
+            message="🎉 This is the first release! 🎉",
+            target_commitish=new_branch.object.sha,
+            generate_release_notes=True,
+        )
+
+        # Assign latest release to the new release for logging purposes
+        latest_release = new_release
+        release_title = new_release.title
+        new_tag = new_release.tag_name
 
     else:
         latest_tag = latest_release.tag_name
@@ -70,7 +88,7 @@ def create_release():
         draft = False
 
         # Attempt to create new release
-        release = repo.create_git_release(
+        new_release = repo.create_git_release(
             release_tag,
             release_title,
             draft=draft,
@@ -78,20 +96,25 @@ def create_release():
             target_commitish=new_branch,
             generate_release_notes=True,
         )
-    release_url = release.html_url
+
+    release_url = new_release.html_url
     compare_release_url = (
-        f"{repo.html_url}/compare/{release.tag_name}...{release.tag_name}"
+        f"{repo.html_url}/compare/{latest_release.tag_name}...{new_release.tag_name}"
     )
 
-    with open("release_log.txt", "w") as file:
-        print("## Links\n", file=file)
-        print(f"📝 **Release Notes can be found here:** {release_url}\n", file=file)
-        print(f"🔗 **Tag Comparison:** {compare_release_url}\n", file=file)
+    # Log items to file
+    release_logger = ReleaseLog("release_log.txt")
 
-        print("## Details\n", file=file)
-        print(f"✅ Created new branch: **{new_branch}**\n", file=file)
-        print(f"✅ Created new tag: **{new_tag}**\n", file=file)
-        print(f"✅ Release Notes title: **{release_title}**\n", file=file)
+    release_logger.append_release_line("## Links")
+    release_logger.append_release_line(
+        f"📝 **Release Notes can be found here:** {release_url}"
+    )
+    release_logger.append_release_line(f"🔗 **Tag Comparison:** {compare_release_url}")
+
+    release_logger.append_release_line("## Details")
+    release_logger.append_release_line(f"✅ Created new branch: **{new_branch}**")
+    release_logger.append_release_line(f"✅ Created new tag: **{new_tag}**")
+    release_logger.append_release_line(f"✅ Release Notes title: **{release_title}**")
 
 
 def update_release():
@@ -103,36 +126,44 @@ def update_release():
     # Attempt to create a new git tag, ref, and merge changes
     branch = repo.get_branch(latest_release_branch)
     main_branch = repo.get_branch("main")
-    newly_created_tag = repo.create_git_tag(incremented_tag, f"Release Candidate tag {incremented_tag} created",
-                                            main_branch.commit.sha, type="commit")
+    newly_created_tag = repo.create_git_tag(
+        incremented_tag,
+        f"Release Candidate tag {incremented_tag} created",
+        main_branch.commit.sha,
+        type="commit",
+    )
 
-    ref = repo.create_git_ref(f"refs/tags/{newly_created_tag.tag}", sha=main_branch.commit.sha)
+    ref = repo.create_git_ref(
+        f"refs/tags/{newly_created_tag.tag}", sha=main_branch.commit.sha
+    )
 
     try:
-        repo.merge(branch.name, ref.object.sha, "Merge changes from newly created tag to release branch")
+        repo.merge(
+            branch.name,
+            ref.object.sha,
+            "Merge changes from newly created tag to release branch",
+        )
     except GithubException as e:
         print(f"Merge unsuccessful. An error occurred: {str(e)}")
 
-    compare_tags_url = (
-        f"{repo.html_url}/compare/{latest_tag.name}...{incremented_tag}"
+    compare_tags_url = f"{repo.html_url}/compare/{latest_tag.name}...{incremented_tag}"
+
+    # Log items to file
+    release_logger = ReleaseLog("release_log.txt")
+
+    release_logger.append_release_line("## Links")
+    release_logger.append_release_line(f"🔗 **Tag Comparison:** {compare_tags_url}")
+
+    release_logger.append_release_line("## Details")
+    release_logger.append_release_line(f"✅ Created new tag: **{incremented_tag}**")
+    release_logger.append_release_line(
+        f"✅ Merged changes into {latest_release_branch} branch"
     )
-
-    with open("release_log.txt", "w") as file:
-        print("## Links\n", file=file)
-        print(f"🔗 **Tag Comparison:** {compare_tags_url}\n", file=file)
-
-        print("## Details\n", file=file)
-        print(f"✅ Created new tag: **{incremented_tag}**\n", file=file)
-        print(f"✅ Merged changes into {latest_release_branch} branch", file=file)
 
 
 def finalize_release():
-    # Get the latest rc branch. Branch format: release/portal/v1.0.0-rc1, release/portal/v1.0.0-rc2, release/portal/v100.1.0-rc5
-
-    # Create release (with PyGithub package) which would create a new release, release notes, and a tag.
-    # The new tag just drops the -rcN. Ex: release/portal/v100.1.0-rc5 -> release/portal/v100.1.0
-
-    # Print the output to a file that will be used in a github action.
+    # To be implemented in #3315
+    print("\n🚀 Starting scripted releases 'finalize_release' action")
     pass
 
 
