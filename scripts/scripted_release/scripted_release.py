@@ -41,10 +41,15 @@ def create_release():
         # Handles the case where a release exists but doesn't follow our expected release format.
         # Example format: `portal/v1.0.0`
         if not latest_release.title.startswith(f"{RELEASE_NAME}/v"):
-            raise UnknownObjectException
+            raise ValueError("No branch matching pattern found")
 
     except UnknownObjectException:
         print("No release found, attempting to create the first release via script.")
+        latest_release = None
+
+    except ValueError:
+        print(
+            "Release found, but no matching release pattern found. Attempting to create the first release via script.")
         latest_release = None
 
     if not latest_release:

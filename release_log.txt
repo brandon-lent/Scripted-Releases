@@ -1,7 +1,7 @@
 ## Links
-📝 **Release Notes can be found here:** https://github.com/brandon-lent/Scripted-Releases-Test/releases/tag/portal/v1.0.0-rc1
-🔗 **Tag Comparison:** https://github.com/brandon-lent/Scripted-Releases-Test/compare/portal/v0.1.0...portal/v1.0.0-rc1
+📝 **Release Notes can be found here:** https://github.com/brandon-lent/Scripted-Releases-Test/releases/tag/portal/v0.1.0-rc1
+🔗 **Tag Comparison:** https://github.com/brandon-lent/Scripted-Releases-Test/compare/portal/v0.1.0-rc1...portal/v0.1.0-rc1
 ## Details
-✅ Created new branch: **release/portal/v1.0.0**
-✅ Created new tag: **portal/v1.0.0-rc1**
-✅ Release Notes title: **portal/v1.0.0-rc1**
+✅ Created new branch: **GitRef(ref="refs/heads/release/portal/v0.1.0")**
+✅ Created new tag: **portal/v0.1.0-rc1**
+✅ Release Notes title: **portal/v0.1.0**
