@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 
-from github import Github, GithubException
+from github import Github, GithubException, UnknownObjectException
 from dotenv import load_dotenv
 from enum import Enum
 
@@ -31,21 +31,31 @@ repo = g.get_repo(repo_name)
 
 def create_release():
     release_version = os.getenv("RELEASE_VERSION")
+    try:
+        latest_release = repo.get_latest_release()
+        # Handles the case where a release exists but doesn't follow our expected release format.
+        if latest_release.title.startswith(f"release/{RELEASE_NAME}/"):
+            raise UnknownObjectException
+    except UnknownObjectException:
+        print("No release found, attempting to create one")
 
-    latest_release = repo.get_latest_release()
-    latest_tag = latest_release.tag_name
+        # Create a base release, tag, and branch if no release exists in repository. This should only run once.
+        new_branch = repo.create_git_ref(f"refs/heads/release/{RELEASE_NAME}/v0.1.0",
+                                         repo.get_branch("main").commit.sha)
 
-    # Create a base release if no release exists in repository. This should only run once.
-    if not latest_release or not latest_release.title.startswith(f"release/{RELEASE_NAME}/"):
-        new_branch = repo.create_git_ref(f"release/{RELEASE_NAME}/v1.0.0", "main", )
-        release = repo.create_git_release(name=f"{RELEASE_NAME}/v0.1.0-rc1", tag=f"{RELEASE_NAME}/v1.0.0", draft=False,
-                                          message="Creating first release! 🎉", target_commitish=new_branch.object.sha,
+        # Create first release as a minor increment
+        release = repo.create_git_release(name=f"{RELEASE_NAME}/v0.1.0-rc1", tag=f"{RELEASE_NAME}/v0.1.0", draft=False,
+                                          message="🎉 This is the first release! 🎉",
+                                          target_commitish=new_branch.object.sha,
                                           generate_release_notes=True)
+        release_title = release.title
+
     else:
-        next_tag, new_branch = increment_release_tag_and_branch_from_version(
+        latest_tag = latest_release.tag_name
+        new_tag, new_branch = increment_release_tag_and_branch_from_version(
             latest_tag, release_version, RELEASE_NAME
         )
-    
+
         try:
             repo.create_git_ref(
                 ref=f"refs/heads/{new_branch}", sha=repo.get_branch("main").commit.sha
@@ -55,7 +65,7 @@ def create_release():
             raise ValueError(f"❌ Failed to create new branch {new_branch}: {str(e)}")
 
         # Provide release details
-        release_tag = next_tag
+        release_tag = new_tag
         release_title = f"{release_tag}"
         draft = False
 
@@ -70,7 +80,7 @@ def create_release():
         )
     release_url = release.html_url
     compare_release_url = (
-        f"{repo.html_url}/compare/{latest_release.tag_name}...{release.tag_name}"
+        f"{repo.html_url}/compare/{release.tag_name}...{release.tag_name}"
     )
 
     with open("release_log.txt", "w") as file:
@@ -80,7 +90,7 @@ def create_release():
 
         print("## Details\n", file=file)
         print(f"✅ Created new branch: **{new_branch}**\n", file=file)
-        print(f"✅ Created new tag: **{next_tag}**\n", file=file)
+        print(f"✅ Created new tag: **{new_tag}**\n", file=file)
         print(f"✅ Release Notes title: **{release_title}**\n", file=file)
 
 

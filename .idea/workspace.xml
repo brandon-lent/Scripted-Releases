@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7b015c59-ac23-4768-b966-53454ca805f1" name="Changes" comment="Updated script and added test">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/release.py" beforeDir="false" afterPath="$PROJECT_DIR$/release.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,8 +20,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="Python Unit Test" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -36,7 +36,15 @@
       </map>
     </option>
   </component>
+  <component name="FormatOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
+  </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="blent/testing123" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -46,6 +54,12 @@
   }
 }</component>
   <component name="GithubPullRequestsUISettings">
+    <option name="recentNewPullRequestHead">
+      <RepoCoordinatesHolder>
+        <option name="owner" value="brandon-lent" />
+        <option name="repository" value="Scripted-Releases-Test" />
+      </RepoCoordinatesHolder>
+    </option>
     <option name="selectedUrlAndAccountId">
       <UrlAndAccount>
         <option name="accountId" value="04a1a99e-ed51-44c8-b8eb-939a413f7cac" />
@@ -68,23 +82,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/brandonlent/code/scripted_release_test&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "blent/testing1234",
+    "last_opened_file_path": "/Users/brandonlent/code/scripted_release_test",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "actions.on.save",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
-  <component name="RunManager" selected="Python tests.pytest for test_scripted_releases_utils.TestGetLatestReleaseBranch">
+}]]></component>
+  <component name="RunManager" selected="Python.release">
     <configuration name="release" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="scripted_release_test" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -107,7 +121,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_scripted_releases_utils.TestGetLatestReleaseBranch" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_scripted_releases_utils.TestExtractVersion" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="scripted_release_test" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -120,11 +134,11 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_scripted_releases_utils.TestGetLatestReleaseBranch&quot;" />
+      <option name="_new_target" value="&quot;test_scripted_releases_utils.TestExtractVersion&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_scripted_releases_utils.TestGetLatestReleaseBranch.test_get_latest_release_branch" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_scripted_releases_utils.TestGetLatestReleaseTag" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="scripted_release_test" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -137,7 +151,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_scripted_releases_utils.TestGetLatestReleaseBranch.test_get_latest_release_branch&quot;" />
+      <option name="_new_target" value="&quot;test_scripted_releases_utils.TestGetLatestReleaseTag&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -158,7 +172,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_scripted_releases_utils.TestIncrementReleaseCandidateString.test_increment_non_rc_tag" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_scripted_releases_utils.TestIncrementReleaseTagAndBranch" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="scripted_release_test" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -171,17 +185,17 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_scripted_releases_utils.TestIncrementReleaseCandidateString.test_increment_non_rc_tag&quot;" />
+      <option name="_new_target" value="&quot;test_scripted_releases_utils.TestIncrementReleaseTagAndBranch&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_scripted_releases_utils.TestGetLatestReleaseBranch" />
-        <item itemvalue="Python tests.pytest for test_scripted_releases_utils.TestGetLatestReleaseBranch.test_get_latest_release_branch" />
         <item itemvalue="Python.release" />
-        <item itemvalue="Python tests.pytest for test_scripted_releases_utils.TestIncrementReleaseCandidateString.test_increment_non_rc_tag" />
+        <item itemvalue="Python tests.pytest for test_scripted_releases_utils.TestIncrementReleaseTagAndBranch" />
         <item itemvalue="Python tests.pytest for test_scripted_releases_utils.TestIncrementReleaseCandidateString" />
+        <item itemvalue="Python tests.pytest for test_scripted_releases_utils.TestGetLatestReleaseTag" />
+        <item itemvalue="Python tests.pytest for test_scripted_releases_utils.TestExtractVersion" />
       </list>
     </recent_temporary>
   </component>
@@ -199,6 +213,7 @@
       <workItem from="1691696347502" duration="148000" />
       <workItem from="1692386562772" duration="8183000" />
       <workItem from="1692724357998" duration="13654000" />
+      <workItem from="1692796669305" duration="18872000" />
     </task>
     <task id="LOCAL-00001" summary="Updated script and added test">
       <option name="closed" value="true" />
@@ -216,7 +231,39 @@
       <option name="project" value="$ENVIRONMENT$" />
       <updated>1692759936964</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Updated script and added test">
+      <option name="closed" value="true" />
+      <created>1692806027014</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="$ENVIRONMENT$" />
+      <updated>1692806027014</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Updated script and added test">
+      <option name="closed" value="true" />
+      <created>1692806061146</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="$ENVIRONMENT$" />
+      <updated>1692806061146</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Updated script and added test">
+      <option name="closed" value="true" />
+      <created>1692806328338</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="$ENVIRONMENT$" />
+      <updated>1692806328338</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Updated script and added test">
+      <option name="closed" value="true" />
+      <created>1692813566298</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="$ENVIRONMENT$" />
+      <updated>1692813566298</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -227,15 +274,19 @@
     <option name="LAST_COMMIT_MESSAGE" value="Updated script and added test" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/scripted_release_test$pytest_for_test_scripted_releases_utils_TestGetLatestReleaseBranch_test_no_release_branches_found.coverage" NAME="pytest for test_scripted_releases_utils.TestGetLatestReleaseBranch.test_no_release_branches_found Coverage Results" MODIFIED="1692797014020" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/scripted_release_test$pytest_for_test_scripted_releases_utils_TestGetLatestReleaseBranch_test_get_latest_release_branch_no_versions.coverage" NAME="pytest for test_scripted_releases_utils.TestGetLatestReleaseBranch.test_get_latest_release_branch_no_versions Coverage Results" MODIFIED="1692747261210" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/scripted_release_test$pytest_for_test_scripted_releases_utils_TestGetLatestReleaseBranch_test_get_latest_release_branch.coverage" NAME="pytest for test_scripted_releases_utils.TestGetLatestReleaseBranch.test_get_latest_release_branch Coverage Results" MODIFIED="1692755557462" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/scripted_release_test$pytest_for_test_scripted_releases_utils_TestGetLatestReleaseBranch_test_get_latest_release_branch.coverage" NAME="pytest for test_scripted_releases_utils.TestGetLatestReleaseBranch.test_get_latest_release_branch Coverage Results" MODIFIED="1692797595386" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/scripted_release_test$MainClass.coverage" NAME="MainClass Coverage Results" MODIFIED="1691698097787" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/venv/lib/python3.9/site-packages/github" />
-    <SUITE FILE_PATH="coverage/scripted_release_test$pytest_for_test_scripted_releases_utils_TestGetLatestReleaseBranch.coverage" NAME="pytest for test_scripted_releases_utils.TestGetLatestReleaseBranch Coverage Results" MODIFIED="1692755629388" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/scripted_release_test$release.coverage" NAME="release Coverage Results" MODIFIED="1692755392944" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/scripted_release_test$pytest_for_test_scripted_releases_utils_TestIncrementReleaseCandidateString.coverage" NAME="pytest for test_scripted_releases_utils.TestIncrementReleaseCandidateString Coverage Results" MODIFIED="1692753762542" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/scripted_release_test$pytest_for_test_scripted_releases_utils_TestGetLatestReleaseBranch.coverage" NAME="pytest for test_scripted_releases_utils.TestGetLatestReleaseBranch Coverage Results" MODIFIED="1692797677976" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/scripted_release_test$pytest_for_test_scripted_releases_utils_TestGetLatestReleaseBranch_test_get_latest_release_branch_with_larger_numbers.coverage" NAME="pytest for test_scripted_releases_utils.TestGetLatestReleaseBranch.test_get_latest_release_branch_with_larger_numbers Coverage Results" MODIFIED="1692746960788" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/scripted_release_test$pytest_for_test_scripted_releases_utils_TestIncrementReleaseTagAndBranch.coverage" NAME="pytest for test_scripted_releases_utils.TestIncrementReleaseTagAndBranch Coverage Results" MODIFIED="1692806260003" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/scripted_release_test$pytest_for_test_scripted_releases_utils_TestGetLatestReleaseTag.coverage" NAME="pytest for test_scripted_releases_utils.TestGetLatestReleaseTag Coverage Results" MODIFIED="1692804549633" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/scripted_release_test$release.coverage" NAME="release Coverage Results" MODIFIED="1692809615861" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/scripted_release_test$pytest_for_test_scripted_releases_utils_TestIncrementReleaseCandidateString.coverage" NAME="pytest for test_scripted_releases_utils.TestIncrementReleaseCandidateString Coverage Results" MODIFIED="1692800148578" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/scripted_release_test$pytest_for_test_scripted_releases_utils_TestReleaseBranch_test_get_latest_release_branch.coverage" NAME="pytest for test_scripted_releases_utils.TestReleaseBranch.test_get_latest_release_branch Coverage Results" MODIFIED="1692726439625" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/scripted_release_test$pytest_for_test_scripted_releases_utils_TestIncrementReleaseCandidateString_test_increment_non_rc_tag.coverage" NAME="pytest for test_scripted_releases_utils.TestIncrementReleaseCandidateString.test_increment_non_rc_tag Coverage Results" MODIFIED="1692753780601" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/scripted_release_test$pytest_in_test_scripted_releases_utils_py.coverage" NAME="pytest in test_scripted_releases_utils.py Coverage Results" MODIFIED="1692407106187" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/scripted_release_test$pytest_for_test_scripted_releases_utils_TestGetLatestReleaseBranch_test_get_latest_release_branch_with_larger_numbers.coverage" NAME="pytest for test_scripted_releases_utils.TestGetLatestReleaseBranch.test_get_latest_release_branch_with_larger_numbers Coverage Results" MODIFIED="1692746960788" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/scripted_release_test$pytest_for_test_scripted_releases_utils_TestExtractVersion.coverage" NAME="pytest for test_scripted_releases_utils.TestExtractVersion Coverage Results" MODIFIED="1692804531716" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

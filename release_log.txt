@@ -1,9 +1,14 @@
 ## Links
 
-🔗 **Tag Comparison:** https://github.com/brandon-lent/Scripted-Releases-Test/compare/portal/v292.1.0-rc8...portal/v292.1.0-rc9
+📝 **Release Notes can be found here:** https://github.com/brandon-lent/Scripted-Releases-Test/releases/tag/portal/v1.0.0-rc1
+
+🔗 **Tag Comparison:** https://github.com/brandon-lent/Scripted-Releases-Test/compare/portal/v1.0.0-rc1...portal/v1.0.0-rc1
 
 ## Details
 
-✅ Created new tag: **portal/v292.1.0-rc9**
+✅ Created new branch: **release/portal/v1.0.0**
 
-✅ Merged changes into release/portal/v292.1.0 branch
+✅ Created new tag: **portal/v1.0.0-rc1**
+
+✅ Release Notes title: **portal/v1.0.0-rc1**
+
