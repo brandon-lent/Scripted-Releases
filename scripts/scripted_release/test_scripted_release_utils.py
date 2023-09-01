@@ -9,7 +9,7 @@ from scripts.scripted_release.scripted_release_utils import (
     extract_version,
     get_latest_release_tag,
     increment_release_candidate_tag,
-    ReleaseLog,
+    ReleaseLog, drop_release_candidate_string,
 )
 
 
@@ -173,6 +173,22 @@ class TestIncrementReleaseCandidateString(unittest.TestCase):
                 ValueError, msg="Invalid RC tag in portal/RC_test. Expected format: -rcN"
         ):
             increment_release_candidate_tag("portal/RC_test")
+
+
+class DropReleaseCandidateTag(unittest.TestCase):
+    def test_drop_release_candidate_tag(self):
+        latest_tag = "portal/v1.0.0-rc1"
+        expected_tag = "portal/v1.0.0"
+        self.assertEqual(drop_release_candidate_string(latest_tag), expected_tag)
+
+    def test_drop_release_candidate_tag_with_higher_rc_number(self):
+        latest_tag = "portal/v1.0.0-rc9000"
+        expected_tag = "portal/v1.0.0"
+        self.assertEqual(drop_release_candidate_string(latest_tag), expected_tag)
+
+    def test_drop_release_candidate_tag_with_invalid_tag_format(self):
+        latest_tag = "tag_doesnt_match"
+        self.assertRaises(ValueError, drop_release_candidate_string, latest_tag)
 
 
 if __name__ == "__main__":

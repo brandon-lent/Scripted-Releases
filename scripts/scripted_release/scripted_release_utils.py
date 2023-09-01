@@ -1,8 +1,9 @@
+# -*- coding: utf-8 -*-
 import re
 from enum import Enum
-from packaging import version
 
 from github.Repository import Repository
+from packaging import version
 
 
 # Maps the release version env variable which is defined by a GitHub action dropdown that runs this script
@@ -25,17 +26,21 @@ class ReleaseLog:
             file.write(release_line + "\n")
 
 
-def increment_release_tag_and_branch_from_version(latest_tag, release_version, release_name):
+def increment_release_tag_and_branch_from_version(
+        latest_tag, release_version, release_name
+):
     """
-    Expected release tag format: portal/v1.0.0
+    Expected release tag format: v1.0.0
 
-    A major version represents a significant release, such as a new feature. We denote this by incrementing the major value in a tag.
+    A major version represents a significant release, such as a new feature.
+    We denote this by incrementing the major value in a tag.
     Example: v1.0.0 -> v2.0.0
 
     A minor release represents a smaller release, such as our regularly deployments that don't include new features.
-    Example: v1.0.0 -> v1.2.0
+    Example: v1.0.0 -> v1.1.0
 
-    The above examples apply to release branches as well, the key difference is the branches are prefixed with 'release/portal/{{tag_version}}
+    The above examples apply to release branches as well, the key difference is the branches are prefixed with
+    'release/portal/{{tag_version}}
     """
     tag_version = re.findall(r"\d+", latest_tag)
     current_major_version = int(tag_version[0])
@@ -45,17 +50,17 @@ def increment_release_tag_and_branch_from_version(latest_tag, release_version, r
         next_tag = f"{release_name}/v{current_major_version + 1}.0.0-rc1"
         new_branch = f"release/{release_name}/v{current_major_version + 1}.0.0"
     elif release_version == ReleaseVersion.MINOR.value:
-        next_tag = f"{release_name}/v{current_major_version}.{current_minor_version + 1}.0-rc1"
-        new_branch = (
-            f"release/{release_name}/v{current_major_version}.{current_minor_version + 1}.0"
+        next_tag = (
+            f"{release_name}/v{current_major_version}.{current_minor_version + 1}.0-rc1"
         )
+        new_branch = f"release/{release_name}/v{current_major_version}.{current_minor_version + 1}.0"
     else:
         raise ValueError("RELEASE_VERSION not set. Action aborted.")
 
     return [next_tag, new_branch]
 
 
-def get_latest_release_branch(release_name, repo):
+def get_latest_release_branch(release_name, repo: Repository):
     """
     Grabs the latest release branch and returns a Branch object.
 
@@ -64,14 +69,19 @@ def get_latest_release_branch(release_name, repo):
 
     Would return: `release/portal/v2.1.0`
     """
-    branch_name_pattern = re.compile(fr'release/{release_name}/v\d+\.\d+\.\d+')
+    branch_name_pattern = re.compile(rf"release/{release_name}/v\d+\.\d+\.\d+")
 
     # Extract matching branches
-    release_branches = [branch.name for branch in repo.get_branches() if
-                        re.match(branch_name_pattern, str(branch.name))]
+    release_branches = [
+        branch.name
+        for branch in repo.get_branches()
+        if re.match(branch_name_pattern, str(branch.name))
+    ]
 
     # Sort the branches by version in descending order
-    latest_branch = sorted(release_branches, key=lambda x: [int(num) for num in re.findall(r"\d+", x)])[-1]
+    latest_branch = sorted(
+        release_branches, key=lambda x: [int(num) for num in re.findall(r"\d+", x)]
+    )[-1]
 
     if not latest_branch:
         raise Exception("No release branches found")
@@ -109,7 +119,9 @@ def get_latest_release_tag(release_name, repo: Repository):
 
     try:
         # Sort the tags by version number and select the latest one
-        latest_tag = max(release_candidate_tags, key=lambda t: version.parse(extract_version(t.name)))
+        latest_tag = max(
+            release_candidate_tags, key=lambda t: version.parse(extract_version(t.name))
+        )
     except ValueError:
         print("No release tags found")
 
@@ -125,7 +137,7 @@ def increment_release_candidate_tag(tag):
     `portal/v1.0.0-rc1` -> `portal/v1.0.0-rc2`
     """
     # Split the tag into its prefix and release candidate number
-    prefix, rc_tag = tag.rsplit('-rc', 1)
+    prefix, rc_tag = tag.rsplit("-rc", 1)
 
     # Try to convert the rc part into an integer, increment and construct the new tag
     try:
@@ -134,3 +146,24 @@ def increment_release_candidate_tag(tag):
     except ValueError:
         raise ValueError(f"Invalid RC tag in {tag}. Expected format: -rcN")
     return new_rc
+
+
+def drop_release_candidate_string(latest_tag):
+    """
+    Takes in the latest_tag which and removes the -rc value to be used as both the release and tag naming convention
+
+    Example input:
+    `portal/v1.0.0-rc1`
+
+    Example output:
+    `portal/v1.0.0-rc2`
+    """
+    last_rc_index = latest_tag.rfind('-rc')
+
+    if last_rc_index != -1:
+        # Extract the base tag without the release candidate part
+        base_tag = latest_tag[:last_rc_index]
+
+        return base_tag
+
+    raise ValueError("release string not formatted properly. Is there an existing release tag with -rcN?")

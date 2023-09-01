@@ -10,6 +10,7 @@ from scripted_release_utils import (
     get_latest_release_branch,
     increment_release_candidate_tag,
     ReleaseLog,
+    drop_release_candidate_string,
 )
 
 load_dotenv()
@@ -49,7 +50,8 @@ def create_release():
 
     except ValueError:
         print(
-            "Release found, but no matching release pattern found. Attempting to create the first release via script.")
+            "Release found, but no matching release pattern found. Attempting to create the first release via script."
+        )
         latest_release = None
 
     if not latest_release:
@@ -59,9 +61,10 @@ def create_release():
             repo.get_branch("main").commit.sha,
         )
 
+        release_naming_pattern = f"{RELEASE_NAME}/v0.1.0-rc1"
         new_release = repo.create_git_release(
-            name=f"{RELEASE_NAME}/v0.1.0",
-            tag=f"{RELEASE_NAME}/v0.1.0-rc1",
+            name=release_naming_pattern,
+            tag=release_naming_pattern,
             draft=False,
             message="🎉 This is the first release! 🎉",
             target_commitish=new_branch.object.sha,
@@ -89,7 +92,7 @@ def create_release():
 
         # Provide release details
         release_tag = new_tag
-        release_title = f"{release_tag}"
+        release_title = release_tag
         draft = False
 
         # Attempt to create new release
@@ -117,7 +120,9 @@ def create_release():
     release_logger.append_release_line(f"🔗 **Tag Comparison:** {compare_release_url}")
 
     release_logger.append_release_line("## Details")
-    release_logger.append_release_line(f"✅ Created new branch: **{new_branch}**")
+    release_logger.append_release_line(
+        f"✅ Created new branch: **[{new_branch.ref.title()}]({new_branch.object.url})**"
+    )
     release_logger.append_release_line(f"✅ Created new tag: **{new_tag}**")
     release_logger.append_release_line(f"✅ Release Notes title: **{release_title}**")
 
@@ -167,9 +172,28 @@ def update_release():
 
 
 def finalize_release():
-    # To be implemented in #3315
-    print("\n🚀 Starting scripted releases 'finalize_release' action")
-    pass
+    latest_release = repo.get_latest_release()
+    latest_tag = latest_release.tag_name
+
+    finalized_release_name = drop_release_candidate_string(latest_tag)
+
+    # Get the latest GitTag object if name matches.
+    tag = next((tag for tag in repo.get_tags() if tag.name == latest_tag), None)
+    
+    new_release = repo.create_git_release(
+        name=finalized_release_name,
+        tag=finalized_release_name,
+        draft=False,
+        message="",
+        target_commitish=tag.commit.sha,
+        generate_release_notes=True,
+    )
+
+    # Log items to file
+    release_logger = ReleaseLog("release_log.txt")
+    release_logger.append_release_line(
+        f"📝 **Release Notes can be found here:** {new_release.html_url}"
+    )
 
 
 def hotfix():
