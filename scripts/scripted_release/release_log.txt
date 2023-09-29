@@ -1,0 +1,3 @@
+
+🏁 Started scripted release using release action: Finalize release 🏁
+📝 **Release Notes can be found here:** https://github.com/brandon-lent/Scripted-Releases-Test/releases/tag/portal/v4.0.0
