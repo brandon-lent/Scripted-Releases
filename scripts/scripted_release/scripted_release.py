@@ -134,7 +134,7 @@ def update_release():
 def finalize_release():
     latest_release_tag = get_latest_release_tag(RELEASE_NAME, repo)
     finalized_release_name = drop_release_candidate_string(latest_release_tag.name)
-
+    # test
     new_release = repo.create_git_release(
         name=finalized_release_name,
         tag=finalized_release_name,
