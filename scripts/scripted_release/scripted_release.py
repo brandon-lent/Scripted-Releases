@@ -141,6 +141,7 @@ def finalize_release():
         message="",
         generate_release_notes=True,
     )
+    # test
 
     release_logger.append_release_line(
         f"📝 **Release Notes can be found here:** {new_release.html_url}"
