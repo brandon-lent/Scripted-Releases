@@ -33,28 +33,22 @@ repo_name = os.getenv("GITHUB_REPOSITORY")
 g = Github(access_token)
 repo = g.get_repo(repo_name)
 
+# Log items to file
+release_logger = ReleaseLog("release_log.txt")
+
 
 def create_release():
     release_version = os.getenv("RELEASE_VERSION")
 
     try:
-        latest_release = repo.get_latest_release()
-        # Handles the case where a release exists but doesn't follow our expected release format.
-        # Example format: `portal/v1.0.0`
-        if not latest_release.title.startswith(f"{RELEASE_NAME}/v"):
-            raise ValueError("No branch matching pattern found")
-
-    except UnknownObjectException:
-        print("No release found, attempting to create the first release via script.")
-        latest_release = None
-
+        latest_release_tag = get_latest_release_tag(RELEASE_NAME, repo)
     except ValueError:
         print(
-            "Release found, but no matching release pattern found. Attempting to create the first release via script."
+            "No matching release pattern found. Attempting to create the first release via script."
         )
-        latest_release = None
+        latest_release_tag = None
 
-    if not latest_release:
+    if not latest_release_tag:
         # Create a base release, tag, and branch if no release exists in repository. This should only run once.
         new_branch = repo.create_git_ref(
             f"refs/heads/release/{RELEASE_NAME}/v0.1.0",
@@ -71,15 +65,9 @@ def create_release():
             generate_release_notes=True,
         )
 
-        # Assign latest release to the new release for logging purposes
-        latest_release = new_release
-        release_title = new_release.title
-        new_tag = new_release.tag_name
-
     else:
-        latest_tag = latest_release.tag_name
         new_tag, new_branch = increment_release_tag_and_branch_from_version(
-            latest_tag, release_version, RELEASE_NAME
+            latest_release_tag.name, release_version, RELEASE_NAME
         )
 
         try:
@@ -100,31 +88,14 @@ def create_release():
             release_tag,
             release_title,
             draft=draft,
-            message="Creating release",
+            message="",
             target_commitish=new_branch,
             generate_release_notes=True,
         )
 
-    release_url = new_release.html_url
-    compare_release_url = (
-        f"{repo.html_url}/compare/{latest_release.tag_name}...{new_release.tag_name}"
-    )
-
-    # Log items to file
-    release_logger = ReleaseLog("release_log.txt")
-
-    release_logger.append_release_line("## Links")
     release_logger.append_release_line(
-        f"📝 **Release Notes can be found here:** {release_url}"
+        f"📝 **Release Notes can be found here:** {new_release.html_url}"
     )
-    release_logger.append_release_line(f"🔗 **Tag Comparison:** {compare_release_url}")
-
-    release_logger.append_release_line("## Details")
-    release_logger.append_release_line(
-        f"✅ Created new branch: **[{new_branch.ref.title()}]({new_branch.object.url})**"
-    )
-    release_logger.append_release_line(f"✅ Created new tag: **{new_tag}**")
-    release_logger.append_release_line(f"✅ Release Notes title: **{release_title}**")
 
 
 def update_release():
@@ -157,40 +128,21 @@ def update_release():
         print(f"Merge unsuccessful. An error occurred: {str(e)}")
 
     compare_tags_url = f"{repo.html_url}/compare/{latest_tag.name}...{incremented_tag}"
-
-    # Log items to file
-    release_logger = ReleaseLog("release_log.txt")
-
-    release_logger.append_release_line("## Links")
     release_logger.append_release_line(f"🔗 **Tag Comparison:** {compare_tags_url}")
-
-    release_logger.append_release_line("## Details")
-    release_logger.append_release_line(f"✅ Created new tag: **{incremented_tag}**")
-    release_logger.append_release_line(
-        f"✅ Merged changes into {latest_release_branch} branch"
-    )
 
 
 def finalize_release():
-    latest_release = repo.get_latest_release()
-    latest_tag = latest_release.tag_name
+    latest_release_tag = get_latest_release_tag(RELEASE_NAME, repo)
+    finalized_release_name = drop_release_candidate_string(latest_release_tag.name)
 
-    finalized_release_name = drop_release_candidate_string(latest_tag)
-
-    # Get the latest GitTag object if name matches.
-    tag = next((tag for tag in repo.get_tags() if tag.name == latest_tag), None)
-    
     new_release = repo.create_git_release(
         name=finalized_release_name,
         tag=finalized_release_name,
         draft=False,
         message="",
-        target_commitish=tag.commit.sha,
         generate_release_notes=True,
     )
 
-    # Log items to file
-    release_logger = ReleaseLog("release_log.txt")
     release_logger.append_release_line(
         f"📝 **Release Notes can be found here:** {new_release.html_url}"
     )
@@ -204,8 +156,9 @@ def hotfix():
 
 release_action = os.getenv("RELEASE_ACTION")
 
-print(f"\n🏁 Started scripted release using release action: {release_action} 🏁")
-print("------")
+release_logger.append_release_line(
+    f"\n🏁 Started scripted release using release action: {release_action} 🏁"
+)
 
 if release_action == ReleaseAction.CREATE_RELEASE.value:
     create_release()

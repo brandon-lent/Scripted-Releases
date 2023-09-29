@@ -8,8 +8,9 @@ from scripts.scripted_release.scripted_release_utils import (
     get_latest_release_branch,
     extract_version,
     get_latest_release_tag,
+    ReleaseLog,
+    drop_release_candidate_string,
     increment_release_candidate_tag,
-    ReleaseLog, drop_release_candidate_string,
 )
 
 

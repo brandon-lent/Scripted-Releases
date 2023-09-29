@@ -27,7 +27,7 @@ class ReleaseLog:
 
 
 def increment_release_tag_and_branch_from_version(
-        latest_tag, release_version, release_name
+        latest_tag_name, release_version, release_name
 ):
     """
     Expected release tag format: v1.0.0
@@ -42,7 +42,7 @@ def increment_release_tag_and_branch_from_version(
     The above examples apply to release branches as well, the key difference is the branches are prefixed with
     'release/portal/{{tag_version}}
     """
-    tag_version = re.findall(r"\d+", latest_tag)
+    tag_version = re.findall(r"\d+", latest_tag_name)
     current_major_version = int(tag_version[0])
     current_minor_version = int(tag_version[1])
 
@@ -156,9 +156,9 @@ def drop_release_candidate_string(latest_tag):
     `portal/v1.0.0-rc1`
 
     Example output:
-    `portal/v1.0.0-rc2`
+    `portal/v1.0.0`
     """
-    last_rc_index = latest_tag.rfind('-rc')
+    last_rc_index = latest_tag.rfind("-rc")
 
     if last_rc_index != -1:
         # Extract the base tag without the release candidate part
@@ -166,4 +166,6 @@ def drop_release_candidate_string(latest_tag):
 
         return base_tag
 
-    raise ValueError("release string not formatted properly. Is there an existing release tag with -rcN?")
+    raise ValueError(
+        "release string not formatted properly. Is there an existing release tag with -rcN?"
+    )
