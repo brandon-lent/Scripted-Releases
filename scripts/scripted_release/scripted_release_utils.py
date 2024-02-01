@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 import re
+import subprocess
+
 from enum import Enum
 
+from github import GithubException
 from github.Repository import Repository
 from packaging import version
 
@@ -169,3 +172,43 @@ def drop_release_candidate_string(latest_tag):
     raise ValueError(
         "release string not formatted properly. Is there an existing release tag with -rcN?"
     )
+
+
+def is_valid_commit_hash(commit_hash, repo):
+    """
+    Checks if a commit hash is valid by attempting to retrieve it from the repository.
+    """
+    try:
+        repo.get_commit(commit_hash)
+        return True
+    except GithubException:
+        return False
+
+
+def run_git_command(command):
+    """
+    Executes a git command using subprocess and exits if the command fails.
+    """
+    try:
+        subprocess.check_call(command, shell=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error executing command '{command}': {e}")
+        exit(1)
+
+
+def cherry_pick_commits(commit_hashes, release_branch):
+    """
+    Checks out the release branch and cherry-picks each commit hash into it.
+    """
+    # Ensure you are on the correct branch
+    run_git_command(f"git checkout {release_branch}")
+
+    # Cherry-pick each commit by its hash
+    for commit_hash in commit_hashes:
+        print(f"Cherry-picking commit {commit_hash} into {release_branch}...")
+        run_git_command(f"git cherry-pick {commit_hash}")
+    print("Cherry-pick complete!")
+
+    print(f"Pushing changes to {release_branch} branch...")
+    run_git_command(f"git push origin {release_branch}")
+    print("Push complete!")

@@ -21,6 +21,11 @@ on:
         options:
           - "Minor"
           - "Major"
+      commit_hashes:
+        type: string
+        description: "List of commit hashes to include in the release. Only relevant if release action = Update release"
+        required: false
+        default: ""
 
 jobs:
   build:
@@ -53,3 +58,4 @@ jobs:
           RELEASE_ACTION: ${{inputs.release_action}}
           RELEASE_VERSION: ${{inputs.release_version}}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMIT_HASHES: ${{inputs.commit_hashes}}
