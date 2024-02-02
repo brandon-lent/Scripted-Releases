@@ -201,8 +201,8 @@ def cherry_pick_commits(commit_hashes, release_branch):
     Checks out the release branch and cherry-picks each commit hash into it.
     """
     # Configure Git user identity
-    run_git_command("git config --global user.name 'GitHub Actions'")
-    run_git_command("git config --global user.email 'actions@github.com'")
+    # run_git_command("git config --global user.name 'GitHub Actions'")
+    # run_git_command("git config --global user.email 'actions@github.com'")
 
     # Ensure you are on the correct branch
     run_git_command(["git", "fetch", "--all"])
