@@ -190,10 +190,10 @@ def run_git_command(command):
     Executes a git command using subprocess and exits if the command fails.
     """
     try:
-        subprocess.check_call(command, shell=True)
+        subprocess.check_call(command, shell=False)
     except subprocess.CalledProcessError as e:
-        print(f"Error executing command '{command}': {e}")
-        exit(1)
+        print(f"Error executing command '{' '.join(command)}': {e}")
+        raise  # Re-raise the exception to handle it outside
 
 
 def cherry_pick_commits(commit_hashes, release_branch):
