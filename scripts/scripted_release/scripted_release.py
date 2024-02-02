@@ -138,7 +138,7 @@ def update_release():
 
         try:
             repo.merge(
-                latest_release_branch.name,
+                repo.get_branch(latest_release_branch).name,
                 ref.object.sha,
                 "Merge changes from newly created tag to release branch",
             )
