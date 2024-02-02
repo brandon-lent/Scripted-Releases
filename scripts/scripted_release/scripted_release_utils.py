@@ -193,7 +193,7 @@ def run_git_command(command):
         subprocess.check_call(command, shell=True)
     except subprocess.CalledProcessError as e:
         print(f"Error executing command '{command}': {e}")
-        raise  # Re-raise the exception to handle it outside
+        raise e  # Re-raise the exception to handle it outside
 
 
 def cherry_pick_commits(commit_hashes, release_branch):
@@ -217,10 +217,10 @@ def cherry_pick_commits(commit_hashes, release_branch):
             print(f"Commit {commit_hash} is a merge commit, attempting to cherry-pick with -m 1 option.")
             try:
                 run_git_command(f"git cherry-pick -m 1 {commit_hash}")
-            except subprocess.CalledProcessError:
+            except subprocess.CalledProcessError as e:
                 print(f"Cherry-pick of merge commit {commit_hash} failed. Consider manual resolution.")
                 run_git_command(f"git cherry-pick --abort")
-                raise  # Optional: Decide whether to stop the entire process or continue with other commits
+                raise e  # Optional: Decide whether to stop the entire process or continue with other commits
 
     print("Cherry-pick complete!")
     print(f"Pushing changes to {release_branch} branch...")
