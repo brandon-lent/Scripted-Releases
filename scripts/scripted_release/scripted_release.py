@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-from github import Github, GithubException, UnknownObjectException
+from github import Github, GithubException
 from dotenv import load_dotenv
 from enum import Enum
 
@@ -11,6 +11,8 @@ from scripted_release_utils import (
     increment_release_candidate_tag,
     ReleaseLog,
     drop_release_candidate_string,
+    is_valid_commit_hash,
+    cherry_pick_commits,
 )
 
 load_dotenv()
@@ -99,33 +101,60 @@ def create_release():
 
 
 def update_release():
+    commit_hashes_input = os.getenv("COMMIT_HASHES").strip()
+
     # Get relevant Github details
     latest_tag = get_latest_release_tag(RELEASE_NAME, repo)
     latest_release_branch = get_latest_release_branch(RELEASE_NAME, repo)
     incremented_tag = increment_release_candidate_tag(latest_tag.name)
 
-    # Attempt to create a new git tag, ref, and merge changes
-    branch = repo.get_branch(latest_release_branch)
-    main_branch = repo.get_branch("main")
-    newly_created_tag = repo.create_git_tag(
-        incremented_tag,
-        f"Release Candidate tag {incremented_tag} created",
-        main_branch.commit.sha,
-        type="commit",
-    )
+    if commit_hashes_input:
+        # List of inputted commit hashes
+        commit_hashes = [
+            commit_hash.strip() for commit_hash in commit_hashes_input.split(",")
+        ]
+        # List of invalid commit hashes
+        invalid_hashes = [
+            commit_hash
+            for commit_hash in commit_hashes
+            if not is_valid_commit_hash(commit_hash, repo)
+        ]
+        if invalid_hashes:
+            raise ValueError(f"Invalid commit hashes provided: {invalid_hashes}")
+        # Cherry-pick commits to release branch
+        cherry_pick_commits(commit_hashes, latest_release_branch)
 
-    ref = repo.create_git_ref(
-        f"refs/tags/{newly_created_tag.tag}", sha=main_branch.commit.sha
-    )
-
-    try:
-        repo.merge(
-            branch.name,
-            ref.object.sha,
-            "Merge changes from newly created tag to release branch",
+        # Create a new git tag and ref using the new latest_release_branch
+        repo.create_git_tag(
+            tag=incremented_tag,
+            tag_message=f"Release Candidate {incremented_tag} created",
+            object=repo.get_branch(latest_release_branch).commit.sha,
+            type="commit",
         )
-    except GithubException as e:
-        print(f"Merge unsuccessful. An error occurred: {str(e)}")
+
+    else:
+        # Attempt to create a new git tag, ref, and merge changes
+        branch = repo.get_branch(latest_release_branch)
+        main_branch = repo.get_branch("main")
+        newly_created_tag = repo.create_git_tag(
+            incremented_tag,
+            f"Release Candidate tag {incremented_tag} created",
+            main_branch.commit.sha,
+            type="commit",
+        )
+
+        ref = repo.create_git_ref(
+            f"refs/tags/{newly_created_tag.tag}", sha=main_branch.commit.sha
+        )
+
+        try:
+            repo.merge(
+                branch.name,
+                ref.object.sha,
+                "Merge changes from newly created tag to release branch",
+            )
+        except GithubException as e:
+            print(f"Merge unsuccessful. An error occurred: {str(e)}")
 
     compare_tags_url = f"{repo.html_url}/compare/{latest_tag.name}...{incremented_tag}"
     release_logger.append_release_line(f"🔗 **Tag Comparison:** {compare_tags_url}")
@@ -133,15 +162,22 @@ def update_release():
 
 def finalize_release():
     latest_release_tag = get_latest_release_tag(RELEASE_NAME, repo)
+
     finalized_release_name = drop_release_candidate_string(latest_release_tag.name)
+
+    # Get the latest GitTag object if name matches.
+    tag = next(
+        (tag for tag in repo.get_tags() if tag.name == latest_release_tag.name), None
+    )
+
     new_release = repo.create_git_release(
         name=finalized_release_name,
         tag=finalized_release_name,
         draft=False,
         message="",
+        target_commitish=tag.commit.sha,
         generate_release_notes=True,
     )
-    # test
 
     release_logger.append_release_line(
         f"📝 **Release Notes can be found here:** {new_release.html_url}"
