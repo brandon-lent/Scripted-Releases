@@ -125,12 +125,25 @@ def update_release():
         cherry_pick_commits(commit_hashes, latest_release_branch)
 
         # Create a new git tag and ref using the new latest_release_branch
-        repo.create_git_tag(
+        newly_created_tag = repo.create_git_tag(
             incremented_tag,
-            f"Release Candidate {incremented_tag} created",
+            f"Release Candidate tag {incremented_tag} created",
             repo.get_branch(latest_release_branch).commit.sha,
             type="commit",
         )
+
+        ref = repo.create_git_ref(
+            f"refs/tags/{newly_created_tag.tag}", sha=repo.get_branch(latest_release_branch).commit.sha,
+        )
+
+        try:
+            repo.merge(
+                latest_release_branch.name,
+                ref.object.sha,
+                "Merge changes from newly created tag to release branch",
+            )
+        except GithubException as e:
+            print(f"Merge unsuccessful. An error occurred: {str(e)}")
 
     else:
         # Attempt to create a new git tag, ref, and merge changes
