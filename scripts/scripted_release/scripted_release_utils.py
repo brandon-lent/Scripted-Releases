@@ -201,8 +201,8 @@ def cherry_pick_commits(commit_hashes, release_branch):
     Checks out the release branch and cherry-picks each commit hash into it.
     """
     # Ensure you are on the correct branch
-    run_git_command("git fetch --all")
-    run_git_command(f"git checkout {release_branch}")
+    run_git_command(["git", "fetch", "--all"])
+    run_git_command(["git", "checkout", release_branch])
 
     # Cherry-pick each commit by its hash
     for commit_hash in commit_hashes:
@@ -220,5 +220,5 @@ def cherry_pick_commits(commit_hashes, release_branch):
 
     print("Cherry-pick complete!")
     print(f"Pushing changes to {release_branch} branch...")
-    run_git_command(f"git push origin {release_branch}")
+    run_git_command(["git", "push", "origin", release_branch])
     print("Push complete!")
