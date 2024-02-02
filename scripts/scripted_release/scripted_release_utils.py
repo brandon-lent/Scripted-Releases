@@ -200,18 +200,21 @@ def cherry_pick_commits(commit_hashes, release_branch):
     """
     Checks out the release branch and cherry-picks each commit hash into it.
     """
-
-    run_git_command("git fetch --all")
-
     # Ensure you are on the correct branch
+    run_git_command("git fetch --all")
     run_git_command(f"git checkout {release_branch}")
 
     # Cherry-pick each commit by its hash
     for commit_hash in commit_hashes:
         print(f"Cherry-picking commit {commit_hash} into {release_branch}...")
-        run_git_command(f"git cherry-pick {commit_hash}")
-    print("Cherry-pick complete!")
+        print(f"Attempting to cherry-pick commit {commit_hash} into {release_branch}...")
+        try:
+            run_git_command(f"git cherry-pick {commit_hash}")
+        except subprocess.CalledProcessError:
+            print(f"Commit {commit_hash} is a merge commit, cherry-picking with -m 1 option.")
+            run_git_command(f"git cherry-pick -m 1 {commit_hash}")
 
+    print("Cherry-pick complete!")
     print(f"Pushing changes to {release_branch} branch...")
     run_git_command(f"git push origin {release_branch}")
     print("Push complete!")
