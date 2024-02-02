@@ -200,6 +200,9 @@ def cherry_pick_commits(commit_hashes, release_branch):
     """
     Checks out the release branch and cherry-picks each commit hash into it.
     """
+
+    run_git_command("git fetch --all")
+
     # Ensure you are on the correct branch
     run_git_command(f"git checkout {release_branch}")
 
