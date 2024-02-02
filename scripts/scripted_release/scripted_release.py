@@ -126,9 +126,9 @@ def update_release():
 
         # Create a new git tag and ref using the new latest_release_branch
         repo.create_git_tag(
-            tag=incremented_tag,
-            tag_message=f"Release Candidate {incremented_tag} created",
-            object=repo.get_branch(latest_release_branch).commit.sha,
+            incremented_tag,
+            f"Release Candidate {incremented_tag} created",
+            repo.get_branch(latest_release_branch).commit.sha,
             type="commit",
         )
 
