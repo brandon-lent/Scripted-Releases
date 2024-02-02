@@ -207,12 +207,16 @@ def cherry_pick_commits(commit_hashes, release_branch):
     # Cherry-pick each commit by its hash
     for commit_hash in commit_hashes:
         print(f"Cherry-picking commit {commit_hash} into {release_branch}...")
-        print(f"Attempting to cherry-pick commit {commit_hash} into {release_branch}...")
         try:
-            run_git_command(f"git cherry-pick {commit_hash}")
+            run_git_command(["git", "cherry-pick", commit_hash])
         except subprocess.CalledProcessError:
-            print(f"Commit {commit_hash} is a merge commit, cherry-picking with -m 1 option.")
-            run_git_command(f"git cherry-pick -m 1 {commit_hash}")
+            print(f"Commit {commit_hash} is a merge commit, attempting to cherry-pick with -m 1 option.")
+            try:
+                run_git_command(["git", "cherry-pick", "-m", "1", commit_hash])
+            except subprocess.CalledProcessError:
+                print(f"Cherry-pick of merge commit {commit_hash} failed. Consider manual resolution.")
+                run_git_command(["git", "cherry-pick", "--abort"])
+                raise  # Optional: Decide whether to stop the entire process or continue with other commits
 
     print("Cherry-pick complete!")
     print(f"Pushing changes to {release_branch} branch...")
