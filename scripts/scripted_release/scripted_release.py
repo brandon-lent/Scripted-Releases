@@ -107,6 +107,8 @@ def update_release():
     latest_tag = get_latest_release_tag(RELEASE_NAME, repo)
     latest_release_branch = get_latest_release_branch(RELEASE_NAME, repo)
     incremented_tag = increment_release_candidate_tag(latest_tag.name)
+    # Get the latest release branch object
+    branch = repo.get_branch(latest_release_branch)
 
     if commit_hashes_input:
         # List of inputted commit hashes
@@ -128,17 +130,17 @@ def update_release():
         newly_created_tag = repo.create_git_tag(
             incremented_tag,
             f"Release Candidate tag {incremented_tag} created",
-            repo.get_branch(latest_release_branch).commit.sha,
+            branch.commit.sha,
             type="commit",
         )
 
         ref = repo.create_git_ref(
-            f"refs/tags/{newly_created_tag.tag}", sha=repo.get_branch(latest_release_branch).commit.sha,
+            f"refs/tags/{newly_created_tag.tag}", sha=branch.commit.sha,
         )
 
         try:
             repo.merge(
-                repo.get_branch(latest_release_branch).name,
+                branch.name,
                 ref.object.sha,
                 "Merge changes from newly created tag to release branch",
             )
@@ -147,7 +149,6 @@ def update_release():
 
     else:
         # Attempt to create a new git tag, ref, and merge changes
-        branch = repo.get_branch(latest_release_branch)
         main_branch = repo.get_branch("main")
         newly_created_tag = repo.create_git_tag(
             incremented_tag,
