@@ -196,7 +196,7 @@ def run_git_command(command):
         raise  # Re-raise the exception to handle it outside
 
 
-def cherry_pick_commits(commit_hashes, release_branch):
+def cherry_pick_commits(commit_hashes, branch):
     """
     Checks out the release branch and cherry-picks each commit hash into it.
     """
@@ -206,11 +206,11 @@ def cherry_pick_commits(commit_hashes, release_branch):
 
     # Ensure you are on the correct branch
     run_git_command(f"git fetch --all")
-    run_git_command(f"git checkout {release_branch}")
+    run_git_command(f"git checkout {branch}")
 
     # Cherry-pick each commit by its hash
     for commit_hash in commit_hashes:
-        print(f"Cherry-picking commit {commit_hash} into {release_branch}...")
+        print(f"Cherry-picking commit {commit_hash} into {branch}...")
         try:
             run_git_command(f"git cherry-pick {commit_hash}")
         except subprocess.CalledProcessError:
@@ -224,6 +224,13 @@ def cherry_pick_commits(commit_hashes, release_branch):
                 raise  # Optional: Decide whether to stop the entire process or continue with other commits
 
     print("Cherry-pick complete!")
-    print(f"Pushing changes to {release_branch} branch...")
-    run_git_command(f"git push origin {release_branch}")
+    print(f"Pushing changes to {branch} branch...")
+    run_git_command(f"git push origin {branch}")
     print("Push complete!")
+
+
+def delete_branch(branch_name, repo):
+    try:
+        repo.delete_git_ref(f"refs/heads/{branch_name}")
+    except GithubException as e:
+        print(f"Failed to delete branch {branch_name}: {str(e)}")
