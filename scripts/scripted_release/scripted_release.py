@@ -151,7 +151,7 @@ def update_release():
             print(f"Merge unsuccessful. An error occurred: {str(e)}")
         finally:
             print(f"Deleting temporary branch {temp_branch_name}")
-            repo.get_branch(temp_branch_name).delete()
+            # repo.get_branch(temp_branch_name).delete()
 
     else:
         # Get the latest release branch object
