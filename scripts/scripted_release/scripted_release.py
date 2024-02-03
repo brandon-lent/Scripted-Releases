@@ -13,7 +13,6 @@ from scripted_release_utils import (
     drop_release_candidate_string,
     is_valid_commit_hash,
     cherry_pick_commits,
-    delete_branch
 )
 
 load_dotenv()
@@ -144,15 +143,15 @@ def update_release():
 
         try:
             repo.merge(
-                repo.get_branch(latest_release_branch),
+                latest_release_branch,
                 ref.object.sha,
-                "Merge changes from newly created tag to release branch",
+                "Merge changes from newly created (cherrypick)tag to release branch",
             )
         except GithubException as e:
             print(f"Merge unsuccessful. An error occurred: {str(e)}")
         finally:
             print(f"Deleting temporary branch {temp_branch_name}")
-            delete_branch(temp_branch_name, repo)
+            repo.get_branch(temp_branch_name).delete()
 
     else:
         # Get the latest release branch object

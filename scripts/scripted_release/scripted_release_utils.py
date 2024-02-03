@@ -227,10 +227,3 @@ def cherry_pick_commits(commit_hashes, branch):
     print(f"Pushing changes to {branch} branch...")
     run_git_command(f"git push origin {branch}")
     print("Push complete!")
-
-
-def delete_branch(branch_name, repo):
-    try:
-        repo.delete_git_ref(f"refs/heads/{branch_name}")
-    except GithubException as e:
-        print(f"Failed to delete branch {branch_name}: {str(e)}")
