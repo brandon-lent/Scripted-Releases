@@ -6,3 +6,5 @@ This is a test file that I'm merging with the main branch.
 We have another change here
 
 other change
+
+- Adding one more change
