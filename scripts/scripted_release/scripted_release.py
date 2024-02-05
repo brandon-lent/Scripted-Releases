@@ -142,7 +142,6 @@ def update_release():
             ref = repo.create_git_ref(
                 f"refs/tags/{newly_created_tag.tag}", sha=repo.get_branch(temp_branch_name).commit.sha,
             )
-
             # Merge changes from newly created tag to release branch
             repo.merge(
                 latest_release_branch,
