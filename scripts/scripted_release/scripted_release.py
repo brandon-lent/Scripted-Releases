@@ -123,37 +123,43 @@ def update_release():
         if invalid_hashes:
             raise ValueError(f"Invalid commit hashes provided: {invalid_hashes}")
 
-        # Create a temporary branch to cherry-pick commits, based on the latest release branch
-        temp_branch_name = f"temp-{incremented_tag}"
-        repo.create_git_ref(ref=f"refs/heads/{temp_branch_name}", sha=repo.get_branch(latest_release_branch).commit.sha)
-
-        # Cherry-pick commits to release branch
-        cherry_pick_commits(commit_hashes, temp_branch_name)
-
-        # Create a new git tag and ref using the new latest_release_branch
-        newly_created_tag = repo.create_git_tag(
-            incremented_tag,
-            f"Release Candidate tag {incremented_tag} created",
-            repo.get_branch(temp_branch_name).commit.sha,
-            type="commit",
-        )
-
-        ref = repo.create_git_ref(
-            f"refs/tags/{newly_created_tag.tag}", sha=repo.get_branch(temp_branch_name).commit.sha,
-        )
-
+        temp_branch_name = None
         try:
+            temp_branch_name = f"temp-{incremented_tag}"
+            repo.create_git_ref(ref=f"refs/heads/{temp_branch_name}",
+                                sha=repo.get_branch(latest_release_branch).commit.sha)
+
+            # Cherry-pick commits to release branch
+            cherry_pick_commits(commit_hashes, temp_branch_name)
+
+            # Create a new git tag and ref using the temp_branch_name
+            newly_created_tag = repo.create_git_tag(
+                incremented_tag,
+                f"Release Candidate tag {incremented_tag} created",
+                repo.get_branch(temp_branch_name).commit.sha,
+                type="commit",
+            )
+            ref = repo.create_git_ref(
+                f"refs/tags/{newly_created_tag.tag}", sha=repo.get_branch(temp_branch_name).commit.sha,
+            )
+
+            # Merge changes from newly created tag to release branch
             repo.merge(
                 latest_release_branch,
                 ref.object.sha,
                 "Merge changes from newly created (cherrypick)tag to release branch",
             )
         except GithubException as e:
-            print(f"Merge unsuccessful. An error occurred: {str(e)}")
+            print(f"Operation unsuccessful. An error occurred: {str(e)}")
+            raise
         finally:
-            print(f"Deleting temporary branch {temp_branch_name}")
-            delete_branch(temp_branch_name)
-
+            if temp_branch_name:
+                try:
+                    print(f"Deleting temporary branch {temp_branch_name}")
+                    delete_branch(temp_branch_name)
+                except Exception as cleanup_exception:
+                    print(
+                        f"Failed to delete temporary branch {temp_branch_name}. Cleanup exception: {cleanup_exception}")
     else:
         # Get the latest release branch object
         branch = repo.get_branch(latest_release_branch)
