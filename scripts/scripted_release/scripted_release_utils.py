@@ -227,3 +227,10 @@ def cherry_pick_commits(commit_hashes, branch):
     print(f"Pushing changes to {branch} branch...")
     run_git_command(f"git push origin {branch}")
     print("Push complete!")
+
+
+def delete_branch(branch_name):
+    """
+    Deletes a branch from the repository. Used to delete the temporary cherrry-pick branch.
+    """
+    run_git_command(f"git push origin --delete {branch_name}")

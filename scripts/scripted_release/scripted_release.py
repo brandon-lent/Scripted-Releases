@@ -13,6 +13,7 @@ from scripted_release_utils import (
     drop_release_candidate_string,
     is_valid_commit_hash,
     cherry_pick_commits,
+    delete_branch
 )
 
 load_dotenv()
@@ -151,7 +152,7 @@ def update_release():
             print(f"Merge unsuccessful. An error occurred: {str(e)}")
         finally:
             print(f"Deleting temporary branch {temp_branch_name}")
-            # repo.get_branch(temp_branch_name).delete()
+            delete_branch(temp_branch_name)
 
     else:
         # Get the latest release branch object
