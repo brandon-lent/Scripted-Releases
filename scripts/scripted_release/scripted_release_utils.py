@@ -190,13 +190,13 @@ def run_git_command(command):
     Executes a git command using subprocess and exits if the command fails.
     """
     try:
-        subprocess.check_call(command, shell=False)
+        subprocess.check_call(command, shell=True)
     except subprocess.CalledProcessError as e:
-        print(f"Error executing command '{' '.join(command)}': {e}")
+        print(f"Error executing command {command}: {e}")
         raise  # Re-raise the exception to handle it outside
 
 
-def cherry_pick_commits(commit_hashes, release_branch):
+def cherry_pick_commits(commit_hashes, branch):
     """
     Checks out the release branch and cherry-picks each commit hash into it.
     """
@@ -205,24 +205,32 @@ def cherry_pick_commits(commit_hashes, release_branch):
     run_git_command("git config --global user.email 'actions@github.com'")
 
     # Ensure you are on the correct branch
-    run_git_command(["git", "fetch", "--all"])
-    run_git_command(["git", "checkout", release_branch])
+    run_git_command(f"git fetch --all")
+    run_git_command(f"git checkout {branch}")
 
     # Cherry-pick each commit by its hash
     for commit_hash in commit_hashes:
-        print(f"Cherry-picking commit {commit_hash} into {release_branch}...")
+        print(f"Cherry-picking commit {commit_hash} into {branch}...")
         try:
-            run_git_command(["git", "cherry-pick", commit_hash])
+            run_git_command(f"git cherry-pick {commit_hash}")
         except subprocess.CalledProcessError:
             print(f"Commit {commit_hash} is a merge commit, attempting to cherry-pick with -m 1 option.")
             try:
-                run_git_command(["git", "cherry-pick", "-m", "1", commit_hash])
+                run_git_command(f"git cherry-pick -m 1 {commit_hash}")
             except subprocess.CalledProcessError:
                 print(f"Cherry-pick of merge commit {commit_hash} failed. Consider manual resolution.")
-                run_git_command(["git", "cherry-pick", "--abort"])
+                run_git_command(f"git status")
+                run_git_command(f"git cherry-pick --abort")
                 raise  # Optional: Decide whether to stop the entire process or continue with other commits
 
     print("Cherry-pick complete!")
-    print(f"Pushing changes to {release_branch} branch...")
-    run_git_command(["git", "push", "origin", release_branch])
+    print(f"Pushing changes to {branch} branch...")
+    run_git_command(f"git push origin {branch}")
     print("Push complete!")
+
+
+def delete_branch(branch_name):
+    """
+    Deletes a branch from the repository. Used to delete the temporary cherrry-pick branch.
+    """
+    run_git_command(f"git push origin --delete {branch_name}")
