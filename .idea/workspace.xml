@@ -5,12 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7b015c59-ac23-4768-b966-53454ca805f1" name="Changes" comment="update update-release to accept commit hashes">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/scripted-release.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/scripted-release.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/scripted_release/scripted_release.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/scripted_release/scripted_release.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/scripted_release/scripted_release_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/scripted_release/scripted_release_utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,7 +87,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "rs/4777-update-update-release-to-accept-commit-hashes",
+    "git-widget-placeholder": "brandon-2",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/romeosinjari/Documents/git/Scripted-Releases-Test",
     "node.js.detected.package.eslint": "true",
@@ -114,7 +109,7 @@
       <recent name="$PROJECT_DIR$/scripts/scripted_release" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.scripted_release">
+  <component name="RunManager">
     <configuration name="Delete_all_branches" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="scripted_release_test" />
       <option name="ENV_FILES" value="" />
@@ -215,15 +210,6 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Python.scripted_release" />
-        <item itemvalue="Python.Delete_all_branches" />
-        <item itemvalue="Python tests.pytest for test_scripted_release.TestRelease.test_finalize_release" />
-        <item itemvalue="Python tests.pytest for test_scripted_release_utils.DropReleaseCandidateTag" />
-        <item itemvalue="Python tests.pytest for test_scripted_release_utils.DropReleaseCandidateTag.test_drop_release_candidate_tag_with_higher_rc_number" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -343,7 +329,23 @@
       <option name="project" value="LOCAL" />
       <updated>1706823789943</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="update update-release to accept commit hashes">
+      <option name="closed" value="true" />
+      <created>1707230281491</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1707230281491</updated>
+    </task>
+    <task id="LOCAL-00014" summary="update update-release to accept commit hashes">
+      <option name="closed" value="true" />
+      <created>1707230350070</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1707230350070</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
