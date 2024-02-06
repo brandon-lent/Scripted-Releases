@@ -4,13 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b015c59-ac23-4768-b966-53454ca805f1" name="Changes" comment="update update-release to accept commit hashes">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/scripted-release.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/scripted-release.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="7b015c59-ac23-4768-b966-53454ca805f1" name="Changes" comment="Updated script and added test">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/scripted_release/scripted_release.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/scripted_release/scripted_release.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/scripted_release/scripted_release_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/scripted_release/scripted_release_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new-file.txt" beforeDir="false" afterPath="$PROJECT_DIR$/new-file.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,7 +88,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "rs/4777-update-update-release-to-accept-commit-hashes",
+    "git-widget-placeholder": "brandon-1",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/romeosinjari/Documents/git/Scripted-Releases-Test",
     "node.js.detected.package.eslint": "true",
@@ -114,7 +110,7 @@
       <recent name="$PROJECT_DIR$/scripts/scripted_release" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.scripted_release">
+  <component name="RunManager">
     <configuration name="Delete_all_branches" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="scripted_release_test" />
       <option name="ENV_FILES" value="" />
@@ -215,15 +211,13 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Python.scripted_release" />
-        <item itemvalue="Python.Delete_all_branches" />
-        <item itemvalue="Python tests.pytest for test_scripted_release.TestRelease.test_finalize_release" />
-        <item itemvalue="Python tests.pytest for test_scripted_release_utils.DropReleaseCandidateTag" />
-        <item itemvalue="Python tests.pytest for test_scripted_release_utils.DropReleaseCandidateTag.test_drop_release_candidate_tag_with_higher_rc_number" />
-      </list>
-    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-985749b364ce-JavaScript-WS-233.14015.89" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -350,9 +344,9 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Updated script and added test" />
     <MESSAGE value="update update-release to accept commit hashes" />
-    <option name="LAST_COMMIT_MESSAGE" value="update update-release to accept commit hashes" />
+    <MESSAGE value="Updated script and added test" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated script and added test" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/scripted_release_test$pytest_for_test_scripted_releases_utils_TestGetLatestReleaseBranch_test_no_release_branches_found.coverage" NAME="pytest for test_scripted_releases_utils.TestGetLatestReleaseBranch.test_no_release_branches_found Coverage Results" MODIFIED="1692797014020" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
