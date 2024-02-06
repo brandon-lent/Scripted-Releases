@@ -4,8 +4,6 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b015c59-ac23-4768-b966-53454ca805f1" name="Changes" comment="update update-release to accept commit hashes">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,7 +85,6 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "brandon-2",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/romeosinjari/Documents/git/Scripted-Releases-Test",
     "node.js.detected.package.eslint": "true",
@@ -352,9 +349,9 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Updated script and added test" />
     <MESSAGE value="update update-release to accept commit hashes" />
-    <option name="LAST_COMMIT_MESSAGE" value="update update-release to accept commit hashes" />
+    <MESSAGE value="Updated script and added test" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated script and added test" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/scripted_release_test$pytest_for_test_scripted_releases_utils_TestGetLatestReleaseBranch_test_no_release_branches_found.coverage" NAME="pytest for test_scripted_releases_utils.TestGetLatestReleaseBranch.test_no_release_branches_found Coverage Results" MODIFIED="1692797014020" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
