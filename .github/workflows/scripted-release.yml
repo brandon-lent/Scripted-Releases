@@ -39,6 +39,15 @@ jobs:
         run: |
           echo "Selected option: ${{ inputs.release_action }}"
 
+      - run: |
+          if [[ "${{ github.event.inputs.release_action }}" == "Update release" ]]; then
+            echo "::set-output name=display_commit_hash::true"
+          else
+            echo "::set-output name=display_commit_hash::false"
+          fi
+        name: Display Commit Hash
+
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
