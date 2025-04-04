@@ -1,133 +1,173 @@
 # Scripted Releases
 
-This workflow is intended to easily automate the release process by automatically creating release notes with a tag and a new release branch.
+![Scripted Releases](https://img.shields.io/badge/version-1.0.0-blue)
+![GitHub Actions](https://img.shields.io/badge/github-actions-2088FF)
+![License](https://img.shields.io/badge/license-MIT-orange)
 
-## Requirements
+A powerful GitHub Actions workflow designed to streamline your software release process. Scripted Releases eliminates manual errors, ensures consistency across releases, and saves valuable development time by automating version control, changelog generation, and deployment workflows directly in your GitHub repository.
 
-Four seperate options required
-1. Create-release
-2. Update-release
-3. Finalize-release
-4. Create-hotfix
+## 📋 Overview
 
-### Create-release
+Scripted Releases automates the entire release lifecycle with four primary GitHub Actions workflows:
 
-**Purpose**: To easily create release branch and release notes with auto-incrementing tags
+- **Create Release** - Generate new release branches with proper versioning
+- **Update Release** - Add changes to existing releases with clear change tracking
+- **Finalize Release** - Promote release candidates to production
 
-When we create a release, we want the ability to have a minor / major version. In order to do this, we can grab a value from the GitHub action dropdown. 
+## ✨ Features
 
-Ex:
+- **Semantic Versioning** - Automatic version incrementation following semver principles
+- **Branch Management** - Automated creation and maintenance of release branches
+- **Release Notes** - Automatically generated changelogs with meaningful diffs
+- **Tagging System** - Structured tag creation for release candidates and production releases
+- **GitHub Integration** - Seamless integration with GitHub Releases
 
-**If the release is minor**:
-1. Grab latest tag. eg: v1.0.0
-2. Tag = v1.1.0-rc1
-3. Branch = release/portal/v1.1.0
+## 🚀 Getting Started
 
-**If the release is major**:
-1. Grab latest tag. eg: v1.0.0
-2. Tag = v2.0.0-rc1
-3. Branch = release/portal/v2.0.0
+### Installation
 
-To create a release it needs to:
-1. Create Release branch Ex: release/portal/v1.0.0
-2. Generate release notes off the that branch with version.
- 1. The Tag for a given release will auto-increment. Ex: First release = portal/v1.0.0-rc1, second release = portal/v2.0.0-rc1
- 2. The release note title will be release-{{date}}
+1. Add the workflow files to your repository in the `.github/workflows/` directory
+2. Configure the workflows according to your project needs
 
-### Update-release
+### Basic Usage
 
-**If the release is a hotfix**
-1. Grab latest tag. eg: v1.0.0
-2. Tag = v1.0.1
-3. Branch = release/portal/v1.0.1-hotfix
+Trigger the workflows from the GitHub Actions tab in your repository:
 
-**Purpose**: In the event an addition to a given release is required, this task will be used. 
+1. **Create Release** - Select the workflow and choose minor or major release type
+2. **Update Release** - Run when you need to add changes to an existing release
+3. **Finalize Release** - Execute when ready to promote to production
 
-To update a release it needs to:
-1. Grab the latest release candidate branch. Ex: release/portal/v1.0.0-rc1
-2. Grab the associated tag and increment the rc. Ex: portal/v1.0.0-rc2
-3. Generate link to display the diff between rc1 and rc2 tag. 
-4. Merge the changes into the release candidate branch. 
+## 📖 Detailed Usage
 
-### Finalize-release
+### Create Release
 
-**Purpose**: We will use this to create the final tag which drops the RC suffix from the existing tags.
+**Purpose**: Create a release branch and release notes with auto-incrementing tags.
 
-To finalize the release, it needs to:
-1. Grab the latest release candidate tag 
-2. Drop the 'rc' on the tag
+**Inputs**:
+- `release-type` - Dropdown to select `minor` or `major` release type
+
+**Behavior**:
+
+For a **minor** release:
+1. Identifies latest tag (e.g., v1.0.0)
+2. Creates new tag: v1.1.0-rc1
+3. Creates branch: release/portal/v1.1.0
+
+For a **major** release:
+1. Identifies latest tag (e.g., v1.0.0)
+2. Creates new tag: v2.0.0-rc1
+3. Creates branch: release/portal/v2.0.0
+
+**Result**:
+- New release branch created
+- Release notes generated comparing latest production tag to new RC
+- GitHub release created with the tag and notes
+
+### Update Release
+
+**Purpose**: Add new changes to an existing release.
+
+**Behavior**:
+1. Identifies the latest release candidate branch
+2. Increments the RC number (e.g., rc1 → rc2)
+3. Generates diff between previous RC and new RC
+4. Merges changes into the release branch
+
+**Result**:
+- Updated release branch
+- New RC tag created
+- Release notes showing changes since previous RC
+
+### Finalize Release
+
+**Purpose**: Promote a release candidate to production.
+
+**Behavior**:
+1. Identifies the latest release candidate tag
+2. Creates a new tag without the RC suffix
+3. Generates comprehensive release notes
+
+**Result**:
+- Production tag created (e.g., v1.1.0)
+- Final release notes comparing previous production release to new release
+- GitHub release marked as latest
 
 
-### Create-hotfix
+## 📝 Examples
 
-**Purpose**: In the event we need to publish a hotfix to the production environment, we can use this action to do so.
+### Major Release Workflow
 
-To create a hotfix, it needs to:
-1. Grab specified commit hash(s) and cherry-pick those into the existing release candidate branch
-2. Create new hotfix tag from the release candidate branch
-3. Generate release notes against the latest release to prod and the newly created tag
+Starting with tag **v1.0.0**:
+
+1. **Create Release**:
+   - Trigger the "Create Release" workflow
+   - Select "major" from the dropdown
+   - Result:
+     - Tag: v2.0.0-rc1
+     - Branch: release/portal/v2.0.0
+     - Notes: Diff between v1.0.0 and v2.0.0-rc1
+
+2. **Update Release**:
+   - Make changes and merge to main
+   - Trigger the "Update Release" workflow
+   - Result:
+     - Tag: v2.0.0-rc2
+     - Branch: release/portal/v2.0.0 (unchanged)
+     - Notes: Diff between v2.0.0-rc1 and v2.0.0-rc2
+
+3. **Finalize Release**:
+   - Trigger the "Finalize Release" workflow
+   - Result:
+     - Tag: v2.0.0
+     - Branch: release/portal/v2.0.0 (unchanged)
+     - Notes: Comprehensive diff between v1.0.0 and v2.0.0
+
+### Minor Release Workflow
+
+Starting with tag **v1.0.0**:
+
+1. **Create Release**:
+   - Trigger the "Create Release" workflow
+   - Select "minor" from the dropdown
+   - Result:
+     - Tag: v1.1.0-rc1
+     - Branch: release/portal/v1.1.0
+     - Notes: Diff between v1.0.0 and v1.1.0-rc1
+
+2. **Update Release**:
+   - Make changes and merge to main
+   - Trigger the "Update Release" workflow
+   - Result:
+     - Tag: v1.1.0-rc2
+     - Branch: release/portal/v1.1.0 (unchanged)
+     - Notes: Diff between v1.1.0-rc1 and v1.1.0-rc2
+
+3. **Finalize Release**:
+   - Trigger the "Finalize Release" workflow
+   - Result:
+     - Tag: v1.1.0
+     - Branch: release/portal/v1.1.0 (unchanged)
+     - Notes: Comprehensive diff between v1.0.0 and v1.1.0
 
 
-## Example with Major release
+## 🔧 Implementation
 
-The current tag is **v1.0.0**
+The workflow uses a combination of GitHub Actions and custom scripts:
 
-### We create a major release
-**Note**: diff is between last production tag and rc1 we are creating
-1. Tag = v2.0.0-rc1
-2. Branch = release/portal/v2.0.0 with the changes in the tag
-3. Release with release notes created in GitHub called portal/v2.0.0-rc1
+- **[generate-release GitHub workflow](.github/workflows/generate-release.yml)** - Main workflow file
+- **[release-notes script](scripts/release-notes.py)** - Python script for generating release notes
 
-### We need to update the release with new changes
-**Note**: diff is between rc1 and rc2 for release notes
-1. Tag = v2.0.0-rc2
-2. Branch = release/portal/v2.0.0
-3. Release with release notes created in GitHub called portal/v2.0.0-rc2
+The workflow leverages GitHub Actions' built-in Git capabilities along with custom logic to manage:
+- Semantic versioning
+- Branch creation and management
+- Tag creation
+- Release note generation
+- GitHub Releases integration
 
-### We finalize the release to promote it to production
-**Note**: Diff is between last production tag and this tag
-1. Tag = v2.0.0
-2. Branch = release/portal/v2.0.0
-3. Release with release notes created in GitHub called portal/v2.0.0
+## 🤝 Contributing
 
-## Example with Minor release
-The current tag is **v1.0.0**
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-### We create a major release
-**Note**: diff is between last production tag and rc1 we are creating
-1. Tag = v1.1.0-rc1
-2. Branch = release/portal/v1.1.0 with the changes in the tag
-3. Release with release notes created in GitHub called portal/v1.1.0-rc1
+## 📄 License
 
-### We need to update the release with new changes
-**Note**: diff is between rc1 and rc2 for release notes
-1. Tag = v1.1.0-rc2
-2. Branch = release/portal/v1.1.0
-3. Release with release notes created in GitHub called portal/v1.1.0-rc2
-
-### We finalize the release to promote it to production
-**Note**: Diff is between last production tag and this tag
-1. Tag = v1.1.0
-2. Branch = release/portal/v1.1.0
-3. Release with release notes created in GitHub called portal/v1.1.0
-
-## Example with Hotfix
-The current tag is **v1.0.0**
-
-### Developer creates Hotfix PR
-1. Opens PR against `main` and merge
-2. Grab the commit hash to pass to the create-hotfix script
-   
-### Developer runs the create-hotfix task
-1. Developer passes in the commit hash to the script which will cherrypick the specified commits
-2. Script creates new tag: v1.0.1
-3. Script creates release notes: portal/v1.0.1. The diff is between v1.0.1 and v1.0.0 in this case.
-
-### We take the tag and deploy to target environment
-1. Pass in the new tag v1.0.1 and deploy that to prod.
-
-## Implementation
-
-We use the [generate-release GitHub workflow](.) to automatically create a new release branch, release notes, and tag. 
-
-In order to run the python script [release-notes](url) 
+This project is licensed under the MIT License - see the LICENSE file for details.
